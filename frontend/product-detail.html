@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} | E-Commerce{% endblock %}
+{% block content %}
+<section class="detail-layout section">
+  <div>{% if product.image_url %}<img class="detail-image" src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<div class="product-placeholder detail-image">ẢNH SẢN PHẨM</div>{% endif %}</div>
+  <div><p class="eyebrow">CHI TIẾT SẢN PHẨM</p><h1>{{ product.name }}</h1>
+    <p class="price detail-price">{{ "{:,.0f}".format(product.price) }}₫ {% if product.old_price %}<del>{{ "{:,.0f}".format(product.old_price) }}₫</del>{% endif %}</p>
+    <p>{{ product.description or "Thông tin sản phẩm sẽ được cập nhật." }}</p>
+    <p>Còn lại: {{ product.stock }}</p>
+    <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" class="add-cart-form">
+      <label>Số lượng <input type="number" name="quantity" value="1" min="1" max="{{ product.stock if product.stock > 0 else 1 }}"></label>
+      <button class="button" type="submit" {% if product.stock < 1 %}disabled{% endif %}>Thêm vào giỏ</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

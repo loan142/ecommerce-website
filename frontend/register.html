@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block title %}Đăng ký | E-Commerce{% endblock %}
+{% block content %}<section class="auth-panel"><p class="eyebrow">TẠO TÀI KHOẢN</p><h1>Đăng ký</h1>
+<form method="post" class="auth-form"><label>Họ tên<input name="full_name" required maxlength="120"></label><label>Email<input type="email" name="email" required></label><label>Mật khẩu<input type="password" name="password" required minlength="8"></label><button class="button">Tạo tài khoản</button></form></section>{% endblock %}

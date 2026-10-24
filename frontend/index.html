@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Trang chủ | E-Commerce{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">BỘ SƯU TẬP MỚI</p>
+    <h1>Mua sắm theo phong cách của bạn.</h1>
+    <p>Khám phá sản phẩm yêu thích với trải nghiệm đơn giản, thuận tiện.</p>
+    <a class="button" href="{{ url_for('products.list_products') }}">Khám phá sản phẩm</a>
+  </div>
+  <div class="hero-art"><span>YOUR<br>STYLE</span></div>
+</section>
+<section class="section">
+  <div class="section-heading"><h2>Sản phẩm nổi bật</h2><a href="{{ url_for('products.list_products') }}">Xem tất cả →</a></div>
+  {% if products %}
+  <div class="product-grid">
+    {% for product in products %}
+    <article class="product-card">
+      <a href="{{ url_for('products.product_detail', product_id=product.id) }}">
+        {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<div class="product-placeholder">ẢNH SẢN PHẨM</div>{% endif %}
+      </a>
+      <div class="product-info"><h3><a href="{{ url_for('products.product_detail', product_id=product.id) }}">{{ product.name }}</a></h3>
+        <p class="price">{{ "{:,.0f}".format(product.price) }}₫ {% if product.old_price %}<del>{{ "{:,.0f}".format(product.old_price) }}₫</del>{% endif %}</p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}<div class="empty-state"><h3>Chưa có sản phẩm</h3><p>Nhóm có thể thêm dữ liệu mẫu để kiểm tra giao diện.</p></div>{% endif %}
+</section>
+{% endblock %}

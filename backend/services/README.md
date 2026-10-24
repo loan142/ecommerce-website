@@ -1,0 +1,1 @@
+Place reusable business logic here (pricing, promotions, order processing, validation). Keep route handlers thin and do not put secrets in this directory.
