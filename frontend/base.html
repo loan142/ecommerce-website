@@ -1,11 +1,49 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% block title %}E-Commerce{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-<script defer src="{{ url_for('static', filename='js/main.js') }}"></script></head>
-<body><header class="site-header"><a class="brand" href="{{ url_for('main.index') }}">MỘC<span>MARKET</span></a>
-<form class="search" action="{{ url_for('products.list_products') }}" method="get"><input type="search" name="q" placeholder="Tìm sản phẩm..." aria-label="Tìm sản phẩm"><button>Tìm</button></form>
-<nav><a href="{{ url_for('products.list_products') }}">Sản phẩm</a><a href="{{ url_for('cart.view_cart') }}">Giỏ hàng</a><a href="{{ url_for('auth.login') }}">Đăng nhập</a></nav></header>
-{% with messages = get_flashed_messages() %}{% if messages %}<div class="flash-wrap">{% for message in messages %}<p class="flash">{{ message }}</p>{% endfor %}</div>{% endif %}{% endwith %}
-<main>{% block content %}{% endblock %}</main>
-<footer class="site-footer"><p>© 2026 Mộc Market · Website thương mại điện tử đồ án nhóm</p><p><a href="{{ url_for('contact.contact') }}">Liên hệ</a> · <a href="{{ url_for('main.policies') }}">Chính sách</a> · <a href="{{ url_for('admin.dashboard') }}">Quản trị</a></p></footer></body></html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4ecdf">
+  <title>{% block title %}Mộc Market | Gốm thủ công Việt{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+  <div class="top-note">Gốm thủ công · Những câu chuyện được gìn giữ qua đất và lửa</div>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('main.index') }}" aria-label="Mộc Market - Trang chủ">
+      <span class="brand-mark" aria-hidden="true">m</span>
+      <span class="brand-wordmark"><strong>MỘC</strong><small>GỐM & VĂN HÓA VIỆT</small></span>
+    </a>
+    <nav class="main-nav" aria-label="Điều hướng chính">
+      <a href="{{ url_for('main.index') }}">Trang chủ</a>
+      <a href="{{ url_for('products.list_products') }}">Sản phẩm</a>
+      <a href="{{ url_for('contact.contact') }}#cau-chuyen">Câu chuyện</a>
+      <a href="{{ url_for('contact.contact') }}">Liên hệ</a>
+    </nav>
+    <div class="header-actions">
+      <form class="search" action="{{ url_for('products.list_products') }}" method="get" role="search">
+        <span class="search-symbol" aria-hidden="true">⌕</span>
+        <input type="search" name="q" placeholder="Tìm món gốm..." aria-label="Tìm sản phẩm">
+      </form>
+      <a class="header-icon" href="{{ url_for('cart.view_cart') }}" aria-label="Giỏ hàng"><span aria-hidden="true">♧</span><small>Giỏ hàng</small></a>
+      <a class="header-login" href="{{ url_for('auth.login') }}">Đăng nhập</a>
+    </div>
+  </header>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}<div class="flash-wrap">{% for message in messages %}<p class="flash">{{ message }}</p>{% endfor %}</div>{% endif %}
+  {% endwith %}
+  <main>{% block content %}{% endblock %}</main>
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-brand"><a class="brand brand-light" href="{{ url_for('main.index') }}"><span class="brand-mark">m</span><span class="brand-wordmark"><strong>MỘC</strong><small>GỐM & VĂN HÓA VIỆT</small></span></a><p>Chạm vào vẻ đẹp mộc mạc của gốm thủ công, trân trọng câu chuyện phía sau mỗi dáng hình.</p></div>
+      <div><h3>Khám phá</h3><a href="{{ url_for('products.list_products') }}">Tất cả sản phẩm</a><a href="{{ url_for('contact.contact') }}#cau-chuyen">Câu chuyện làng nghề</a><a href="{{ url_for('contact.contact') }}">Liên hệ</a></div>
+      <div><h3>Hỗ trợ</h3><a href="{{ url_for('main.policies') }}">Chính sách mua hàng</a><a href="{{ url_for('cart.view_cart') }}">Giỏ hàng</a><a href="{{ url_for('auth.login') }}">Tài khoản</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Mộc Market · Đồ án thương mại điện tử</span><a href="{{ url_for('admin.dashboard') }}">Quản trị</a><span>Giữ gìn nét đẹp từ đất Việt</span></div>
+  </footer>
+</body>
+</html>
