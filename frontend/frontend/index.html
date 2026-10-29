@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Mộc Market | Hồn đất, sắc men{% endblock %}
+{% block content %}
+<section class="hero hero-ceramics">
+  <div class="hero-copy">
+    <p class="eyebrow"><span></span> TỪ ĐẤT LÀNH · QUA BÀN TAY NGƯỜI THỢ</p>
+    <h1>Hồn đất Việt,<br><em>nét đẹp lưu truyền.</em></h1>
+    <p class="hero-description">Từ sắc men mộc mạc đến dáng hình được nắn bằng đôi tay, mỗi món gốm mang theo một phần ký ức và nếp sống Việt.</p>
+    <div class="hero-actions"><a class="button" href="{{ url_for('products.list_products') }}">Khám phá gốm <span aria-hidden="true">↗</span></a><a class="text-link" href="#cau-chuyen">Chuyện của đất và lửa <span aria-hidden="true">↓</span></a></div>
+    <div class="hero-note"><span class="note-line"></span><span>Đẹp bởi nét riêng, quý bởi bàn tay làm nên.</span></div>
+  </div>
+  <div class="hero-visual" role="img" aria-label="Bộ sưu tập gốm thủ công trong ánh nắng tự nhiên">
+    <div class="hero-image"></div>
+    <div class="hero-stamp"><span>THỦ CÔNG</span><strong>Made<br>with care</strong><span>GỐM VIỆT</span></div>
+    <div class="hero-caption"><span>01 / 03</span><span>Vẻ đẹp không vội vàng</span></div>
+  </div>
+</section>
+
+<section class="values-strip" aria-label="Giá trị thương hiệu">
+  <div><span class="value-icon">✳</span><p><strong>Nét riêng thủ công</strong><small>Mỗi dáng hình một sắc thái</small></p></div>
+  <div><span class="value-icon">◌</span><p><strong>Chất liệu từ đất</strong><small>Mộc mạc, gần gũi tự nhiên</small></p></div>
+  <div><span class="value-icon">⌂</span><p><strong>Gìn giữ văn hóa</strong><small>Tôn trọng câu chuyện làng nghề</small></p></div>
+</section>
+
+<section class="section collection-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">TÌM MÓN GỐM HỢP VỚI BẠN</p><h2>Những điều nhỏ bé,<br><em>làm nên một mái nhà.</em></h2></div>
+    <a class="text-link" href="{{ url_for('products.list_products') }}">Xem tất cả sản phẩm <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="category-grid">
+    <a class="category-card category-tea" href="{{ url_for('products.list_products') }}"><span class="category-number">01</span><div><small>CHO NHỮNG KHOẢNH KHẮC CHẬM</small><h3>Trà & tĩnh tại</h3><span class="category-arrow">Khám phá ↗</span></div></a>
+    <a class="category-card category-vase" href="{{ url_for('products.list_products') }}"><span class="category-number">02</span><div><small>ĐIỂM NHẤN TRONG KHÔNG GIAN</small><h3>Bình & dáng gốm</h3><span class="category-arrow">Khám phá ↗</span></div></a>
+    <a class="category-card category-home" href="{{ url_for('products.list_products') }}"><span class="category-number">03</span><div><small>VẺ ĐẸP TRONG ĐỜI SỐNG</small><h3>Gốm cho nhà</h3><span class="category-arrow">Khám phá ↗</span></div></a>
+  </div>
+</section>
+
+<section class="section featured-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">ĐƯỢC CHỌN BẰNG SỰ NÂNG NIU</p><h2>Sản phẩm nổi bật</h2><p class="section-intro">Những món gốm giản dị để dùng mỗi ngày, cũng đủ đặc biệt để trao tặng.</p></div>
+    <a class="text-link" href="{{ url_for('products.list_products') }}">Xem cửa hàng <span aria-hidden="true">↗</span></a>
+  </div>
+  {% if products %}
+  <div class="product-grid">
+    {% for product in products %}
+    <article class="product-card">
+      <a class="product-image-link" href="{{ url_for('products.product_detail', product_id=product.id) }}">
+        {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">{% else %}<div class="product-placeholder"><span>GỐM THỦ CÔNG</span><small>Ảnh sản phẩm sắp được cập nhật</small></div>{% endif %}
+        <span class="product-quick-view">Xem chi tiết ↗</span>
+      </a>
+      <div class="product-info"><p class="product-kicker">MỘC MARKET · GỐM VIỆT</p><h3><a href="{{ url_for('products.product_detail', product_id=product.id) }}">{{ product.name }}</a></h3>
+        <p class="price">{{ "{:,.0f}".format(product.price) }}₫ {% if product.old_price %}<del>{{ "{:,.0f}".format(product.old_price) }}₫</del>{% endif %}</p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}<div class="empty-state"><span class="empty-mark">m</span><h3>Góc trưng bày đang được chuẩn bị</h3><p>Những món gốm đầu tiên sẽ sớm có mặt tại đây.</p><a class="button" href="{{ url_for('products.list_products') }}">Ghé cửa hàng</a></div>{% endif %}
+</section>
+
+<section class="story-section" id="cau-chuyen">
+  <div class="story-image" role="img" aria-label="Không gian làm gốm thủ công"></div>
+  <div class="story-copy"><p class="eyebrow">MỘT CHÚT VỀ NGHỀ GỐM</p><h2>Đất qua tay người,<br><em>thành điều đáng giữ.</em></h2><p>Gốm hiện diện trong bữa cơm, chén trà và góc nhà thân thuộc. Trong dáng bình, đường men và dấu tay còn lưu lại, ta bắt gặp sự kiên nhẫn của người thợ cùng vẻ đẹp được tạo nên từ đất và lửa.</p><p>Mộc Market mong đưa vẻ đẹp ấy đến gần hơn với đời sống hôm nay, đồng thời kể lại những câu chuyện có thật về sản phẩm, người thợ và làng nghề đứng sau mỗi dáng gốm.</p><a class="story-link" href="{{ url_for('contact.contact') }}">Tìm hiểu thêm về chúng tôi <span aria-hidden="true">↗</span></a></div>
+</section>
+
+<section class="closing-note"><span class="closing-ornament">✳</span><p>Chọn một món gốm. Mang về một câu chuyện.</p><a href="{{ url_for('products.list_products') }}">Tìm món gốm của bạn ↗</a></section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Sản phẩm | E-Commerce{% endblock %}
+{% block content %}
+<section class="section">
+  <p class="eyebrow">CỬA HÀNG</p><h1>Tất cả sản phẩm</h1>
+  <form class="filter-bar" method="get">
+    <input name="q" type="search" value="{{ keyword }}" placeholder="Tìm sản phẩm...">
+    <select name="sort" aria-label="Sắp xếp">
+      <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Mới nhất</option>
+      <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Giá tăng dần</option>
+      <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Giá giảm dần</option>
+    </select><button class="button">Tìm / Sắp xếp</button>
+  </form>
+  {% if products %}<div class="product-grid">
+  {% for product in products %}<article class="product-card">
+    <a href="{{ url_for('products.product_detail', product_id=product.id) }}">
+    {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<div class="product-placeholder">ẢNH SẢN PHẨM</div>{% endif %}</a>
+    <div class="product-info"><h3><a href="{{ url_for('products.product_detail', product_id=product.id) }}">{{ product.name }}</a></h3><p class="price">{{ "{:,.0f}".format(product.price) }}₫</p></div>
+  </article>{% endfor %}</div>
+  {% else %}<div class="empty-state"><h3>Không tìm thấy sản phẩm</h3><p>Thử từ khóa khác nhé.</p></div>{% endif %}
+</section>
+{% endblock %}

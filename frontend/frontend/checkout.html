@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Thanh toán | E-Commerce{% endblock %}
+{% block content %}
+<section class="auth-panel"><p class="eyebrow">HOÀN TẤT ĐƠN HÀNG</p><h1>Thông tin đặt hàng</h1>
+<form method="post" class="auth-form">
+<label>Họ tên<input name="full_name" required maxlength="120"></label>
+<label>Số điện thoại<input name="phone" required maxlength="30"></label>
+<label>Địa chỉ giao hàng<textarea name="address" required rows="3"></textarea></label>
+<label>Phương thức thanh toán<select name="payment_method"><option value="cod">Thanh toán khi nhận hàng (COD)</option></select></label>
+<button class="button" type="submit">Xác nhận đặt hàng</button>
+</form><p class="muted">Thanh toán trực tuyến chưa được tích hợp trong bộ khung.</p>
+</section>
+{% endblock %}

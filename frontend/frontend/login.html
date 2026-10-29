@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Đăng nhập | E-Commerce{% endblock %}
+{% block content %}<section class="auth-panel"><p class="eyebrow">CHÀO MỪNG TRỞ LẠI</p><h1>Đăng nhập</h1>
+<form method="post" class="auth-form"><label>Email<input type="email" name="email" required></label><label>Mật khẩu<input type="password" name="password" required></label><button class="button">Đăng nhập</button></form>
+<p>Chưa có tài khoản? <a href="{{ url_for('auth.register') }}">Đăng ký</a></p></section>{% endblock %}

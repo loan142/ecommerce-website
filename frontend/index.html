@@ -3,16 +3,17 @@
 {% block content %}
 <section class="hero hero-ceramics">
   <div class="hero-copy">
-    <p class="eyebrow"><span></span> TỪ ĐẤT LÀNH · QUA BÀN TAY NGƯỜI THỢ</p>
-    <h1>Hồn đất Việt,<br><em>nét đẹp lưu truyền.</em></h1>
-    <p class="hero-description">Từ sắc men mộc mạc đến dáng hình được nắn bằng đôi tay, mỗi món gốm mang theo một phần ký ức và nếp sống Việt.</p>
+    <p class="eyebrow"><span></span> MỘC MARKET · GỐM THỦ CÔNG VIỆT NAM</p>
+    <h1>Đất kể chuyện.<br><em>Men lưu hồn.</em></h1>
+    <p class="hero-description">Từ bàn tay người thợ đến góc nhà hôm nay — mỗi món gốm mang theo dấu vết của đất, lửa và một nét đẹp Việt được gìn giữ qua thời gian.</p>
     <div class="hero-actions"><a class="button" href="{{ url_for('products.list_products') }}">Khám phá gốm <span aria-hidden="true">↗</span></a><a class="text-link" href="#cau-chuyen">Chuyện của đất và lửa <span aria-hidden="true">↓</span></a></div>
     <div class="hero-note"><span class="note-line"></span><span>Đẹp bởi nét riêng, quý bởi bàn tay làm nên.</span></div>
   </div>
   <div class="hero-visual" role="img" aria-label="Bộ sưu tập gốm thủ công trong ánh nắng tự nhiên">
     <div class="hero-image"></div>
-    <div class="hero-stamp"><span>THỦ CÔNG</span><strong>Made<br>with care</strong><span>GỐM VIỆT</span></div>
-    <div class="hero-caption"><span>01 / 03</span><span>Vẻ đẹp không vội vàng</span></div>
+    <div class="hero-stamp"><span>ĐẤT · LỬA · TAY NGHỀ</span><strong>Mộc<br>từ tâm</strong><span>GỐM VIỆT</span></div>
+    <div class="hero-caption"><span>DI SẢN TRONG ĐỜI SỐNG</span><span>Vẻ đẹp không vội vàng</span></div>
+    <div class="hero-side-label">GÌN GIỮ NÉT ĐẸP LÀNG NGHỀ</div>
   </div>
 </section>
 
@@ -22,15 +23,18 @@
   <div><span class="value-icon">⌂</span><p><strong>Gìn giữ văn hóa</strong><small>Tôn trọng câu chuyện làng nghề</small></p></div>
 </section>
 
-<section class="section collection-section">
-  <div class="section-heading">
-    <div><p class="eyebrow">TÌM MÓN GỐM HỢP VỚI BẠN</p><h2>Những điều nhỏ bé,<br><em>làm nên một mái nhà.</em></h2></div>
-    <a class="text-link" href="{{ url_for('products.list_products') }}">Xem tất cả sản phẩm <span aria-hidden="true">↗</span></a>
+<section class="heritage-feature" aria-label="Cảm hứng làng nghề">
+  <div class="heritage-seal" aria-hidden="true"><span>MỘC</span><small>GỐM VIỆT</small></div>
+  <div class="heritage-copy">
+    <p class="eyebrow">TỪ LÀNG NGHỀ ĐẾN MÁI NHÀ</p>
+    <h2>Một dáng gốm.<br><em>Ngàn lớp ký ức.</em></h2>
+    <p>Không chỉ là vật dụng, gốm còn lưu lại nhịp sống, bàn tay và tinh thần của những người thợ Việt.</p>
   </div>
-  <div class="category-grid">
-    <a class="category-card category-tea" href="{{ url_for('products.list_products') }}"><span class="category-number">01</span><div><small>CHO NHỮNG KHOẢNH KHẮC CHẬM</small><h3>Trà & tĩnh tại</h3><span class="category-arrow">Khám phá ↗</span></div></a>
-    <a class="category-card category-vase" href="{{ url_for('products.list_products') }}"><span class="category-number">02</span><div><small>ĐIỂM NHẤN TRONG KHÔNG GIAN</small><h3>Bình & dáng gốm</h3><span class="category-arrow">Khám phá ↗</span></div></a>
-    <a class="category-card category-home" href="{{ url_for('products.list_products') }}"><span class="category-number">03</span><div><small>VẺ ĐẸP TRONG ĐỜI SỐNG</small><h3>Gốm cho nhà</h3><span class="category-arrow">Khám phá ↗</span></div></a>
+  <div class="heritage-details">
+    <span class="heritage-index">01 — 03</span>
+    <span class="heritage-rule"></span>
+    <p>Đất mộc<br>Men thủ công<br>Nét Việt truyền đời</p>
+    <a href="{{ url_for('products.list_products') }}">Khám phá các tác phẩm <b aria-hidden="true">↗</b></a>
   </div>
 </section>
 
