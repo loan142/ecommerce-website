@@ -1,5 +1,10 @@
+import sys
+
 from backend.app import create_app
 from backend.models import db, Product
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 app = create_app()
 
