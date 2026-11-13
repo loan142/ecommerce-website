@@ -10,6 +10,9 @@ def login():
     if request.method == "POST":
         user = User.query.filter_by(email=request.form.get("email", "").strip().lower()).first()
         if user and check_password_hash(user.password_hash, request.form.get("password", "")):
+            if user.role != "customer":
+                flash("Thông tin đăng nhập không hợp lệ cho cổng khách hàng.")
+                return render_template("login.html")
             session["user_id"] = user.id
             flash("Đăng nhập thành công.")
             return redirect(url_for("main.index"))
@@ -36,6 +39,10 @@ def register():
 
 @auth_bp.get("/logout")
 def logout():
+    user_id = session.get("user_id")
+    user = db.session.get(User, user_id) if user_id is not None else None
     session.clear()
     flash("Bạn đã đăng xuất.")
-    return redirect(url_for("main.index"))
+    if user is not None and user.role == "admin":
+        return redirect(url_for("admin.login"))
+    return redirect(url_for("auth.login"))
