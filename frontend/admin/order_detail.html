@@ -1,0 +1,68 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Đơn hàng #{{ order.id }} | Mộc Market{% endblock %}
+{% set active_section = "orders" %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-orders.css') }}">{% endblock %}
+{% block content %}
+<section class="section admin-orders">
+  <div class="admin-page-heading">
+    <div><p class="eyebrow">QUẢN TRỊ / ĐƠN HÀNG</p><h1>Chi tiết đơn hàng #{{ order.id }}</h1></div>
+    <a class="button secondary" href="{{ url_for('admin.orders') }}">Quay lại danh sách</a>
+  </div>
+  <div class="admin-order-summary">
+    <div><span class="admin-order-label">Tài khoản đặt hàng</span>{% if buyer %}<strong>{{ buyer.full_name }}</strong><span>{{ buyer.email }}</span>{% else %}<strong>Khách vãng lai</strong>{% endif %}</div>
+    <div><span class="admin-order-label">Mã đơn</span><strong>#{{ order.id }}</strong></div>
+    <div><span class="admin-order-label">Trạng thái</span><span class="order-status order-status-{{ order.status }}">{{ status_label }}</span></div>
+    <div><span class="admin-order-label">Tổng đơn</span><strong>{{ "{:,.0f}".format(order.total_amount) }}₫</strong></div>
+  </div>
+
+  <section class="admin-shipping-details" aria-labelledby="shipping-details-title">
+    <h2 id="shipping-details-title">Thông tin giao hàng</h2>
+    <dl>
+      <div><dt>Ngày đặt</dt><dd>{% if order.created_at %}{{ order.created_at.strftime("%d/%m/%Y %H:%M") }}{% else %}<span class="muted">Đơn hàng cũ chưa có dữ liệu thời gian.</span>{% endif %}</dd></div>
+      <div><dt>Người nhận</dt><dd>{% if order.recipient_name %}{{ order.recipient_name }}{% else %}<span class="muted">Chưa lưu thông tin người nhận.</span>{% endif %}</dd></div>
+      <div><dt>Số điện thoại</dt><dd>{% if order.recipient_phone %}<a href="tel:{{ order.recipient_phone }}">{{ order.recipient_phone }}</a>{% else %}<span class="muted">Chưa lưu số điện thoại.</span>{% endif %}</dd></div>
+      <div class="admin-shipping-address"><dt>Địa chỉ giao hàng</dt><dd>{% if order.shipping_address %}{{ order.shipping_address }}{% else %}<span class="muted">Đơn hàng cũ chưa có địa chỉ giao hàng.</span>{% endif %}</dd></div>
+      <div><dt>Phương thức thanh toán</dt><dd>{% if order.payment_method == "cod" %}Thanh toán khi nhận hàng (COD){% elif order.payment_method %}{{ order.payment_method }}{% else %}<span class="muted">Đơn hàng cũ chưa có dữ liệu.</span>{% endif %}</dd></div>
+      <div><dt>Ghi chú</dt><dd>{% if order.note %}{{ order.note }}{% else %}<span class="muted">Không có ghi chú.</span>{% endif %}</dd></div>
+    </dl>
+  </section>
+
+  {% if next_statuses %}
+  <form class="admin-order-update" method="post" action="{{ url_for('admin.update_order_status', order_id=order.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="order-status">Cập nhật trạng thái</label>
+    <div>
+      <select id="order-status" name="status" required>
+        {% for status in next_statuses %}<option value="{{ status }}">{{ status_labels[status] }}</option>{% endfor %}
+      </select>
+      <button class="button" type="submit">Lưu trạng thái</button>
+    </div>
+    {% if "cancelled" in next_statuses %}<p class="muted">Hủy đơn sẽ hoàn lại tồn kho theo số lượng từng sản phẩm trong đơn.</p>{% endif %}
+  </form>
+  {% else %}
+  <p class="admin-order-terminal">Đơn hàng đã ở trạng thái cuối cùng và không thể thay đổi.</p>
+  {% endif %}
+
+  <h2 class="admin-order-items-heading">Sản phẩm đã đặt</h2>
+  {% if order_items %}
+  <div class="admin-order-table-wrap">
+    <table class="admin-order-table">
+      <thead><tr><th>Sản phẩm</th><th>Số lượng</th><th>Đơn giá lúc đặt</th><th>Thành tiền</th></tr></thead>
+      <tbody>
+      {% for row in order_items %}
+      <tr>
+        <td>{% if row.product %}{{ row.product.name }}{% else %}Sản phẩm không còn trong hệ thống (#{{ row.item.product_id }}){% endif %}</td>
+        <td>{{ row.item.quantity }}</td>
+        <td>{{ "{:,.0f}".format(row.item.unit_price) }}₫</td>
+        <td>{{ "{:,.0f}".format(row.line_total) }}₫</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty-state"><p>Đơn hàng này hiện không có sản phẩm chi tiết.</p></div>
+  {% endif %}
+  <p class="admin-order-total">Tổng đơn hàng: <strong>{{ "{:,.0f}".format(order.total_amount) }}₫</strong></p>
+</section>
+{% endblock %}

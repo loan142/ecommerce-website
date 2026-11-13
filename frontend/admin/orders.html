@@ -1,3 +1,64 @@
-{% extends "base.html" %}
-{% block title %}Quản lý đơn hàng | E-Commerce{% endblock %}
-{% block content %}<section class="section"><p class="eyebrow">ADMIN / ORDERS</p><h1>Quản lý đơn hàng</h1><p>Đây là giao diện nền. Nhóm sẽ bổ sung danh sách đơn hàng và cập nhật trạng thái.</p><a class="button" href="{{ url_for('admin.dashboard') }}">Quay lại dashboard</a></section>{% endblock %}
+{% extends "admin/base_admin.html" %}
+{% block title %}Quản lý đơn hàng | Mộc Market{% endblock %}
+{% set active_section = "orders" %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-orders.css') }}">{% endblock %}
+{% block content %}
+<section class="section admin-orders">
+  <div class="admin-page-heading">
+    <div><p class="eyebrow">QUẢN TRỊ / ĐƠN HÀNG</p><h1>Quản lý đơn hàng</h1><p class="muted">Theo dõi đơn đặt hàng và cập nhật trạng thái xử lý.</p></div>
+    <a class="button secondary" href="{{ url_for('admin.dashboard') }}">Quay lại Dashboard</a>
+  </div>
+  <form class="admin-order-filter" method="get" action="{{ url_for('admin.orders') }}">
+    <label for="order-status-filter">Lọc theo trạng thái</label>
+    <div>
+      <select id="order-status-filter" name="status">
+        <option value="" {% if not selected_status %}selected{% endif %}>Tất cả trạng thái</option>
+        {% for status, label in status_labels.items() %}
+        <option value="{{ status }}" {% if selected_status == status %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <button class="button secondary" type="submit">Lọc đơn hàng</button>
+      {% if selected_status %}<a class="text-button" href="{{ url_for('admin.orders') }}">Xóa bộ lọc</a>{% endif %}
+    </div>
+  </form>
+
+  {% if orders %}
+  <div class="admin-order-table-wrap">
+    <table class="admin-order-table">
+      <thead><tr><th>Mã đơn</th><th>Người mua</th><th>Số lượng</th><th>Tổng tiền</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+      <tbody>
+      {% for row in orders %}
+      <tr>
+        <td>#{{ row.order.id }}</td>
+        <td>{% if row.buyer %}<span>{{ row.buyer.full_name }}</span><small>{{ row.buyer.email }}</small>{% else %}<span class="muted">Khách vãng lai</span>{% endif %}</td>
+        <td>{{ row.item_count }}</td>
+        <td>{{ "{:,.0f}".format(row.order.total_amount) }}₫</td>
+        <td><span class="order-status order-status-{{ row.order.status }}">{{ row.status_label }}</span></td>
+        <td>
+          <div class="admin-order-actions">
+            <a class="button secondary" href="{{ url_for('admin.order_detail', order_id=row.order.id) }}">Xem chi tiết</a>
+            {% if row.next_statuses %}
+            <form class="admin-order-status-form" method="post" action="{{ url_for('admin.update_order_status', order_id=row.order.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <label class="sr-only" for="order-status-{{ row.order.id }}">Trạng thái mới cho đơn {{ row.order.id }}</label>
+              <select id="order-status-{{ row.order.id }}" name="status" required>
+                {% for status in row.next_statuses %}<option value="{{ status }}">{{ status_labels[status] }}</option>{% endfor %}
+              </select>
+              <button class="button" type="submit">Cập nhật</button>
+            </form>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty-state">
+    <h2>{% if selected_status %}Không có đơn hàng ở trạng thái này{% else %}Chưa có đơn hàng{% endif %}</h2>
+    <p>{% if selected_status %}Hãy chọn trạng thái khác để xem đơn hàng.{% else %}Đơn hàng được tạo sau khi khách hoàn tất bước đặt hàng.{% endif %}</p>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

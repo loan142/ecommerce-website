@@ -1,6 +1,191 @@
 {% extends "base.html" %}
-{% block title %}Chính sách | E-Commerce{% endblock %}
-{% block content %}<section class="section policy"><p class="eyebrow">THÔNG TIN MINH BẠCH</p><h1>Chính sách mua hàng</h1>
-<h2>Vận chuyển</h2><p>Nhóm cập nhật thời gian, phí vận chuyển và phạm vi giao hàng tại đây.</p>
-<h2>Đổi trả</h2><p>Nhóm bổ sung điều kiện, thời hạn và quy trình đổi trả trước khi website vận hành.</p>
-<h2>Bảo hành</h2><p>Nêu rõ sản phẩm nào được bảo hành và thời hạn áp dụng (nếu có).</p></section>{% endblock %}
+{% block title %}Chính sách mua hàng và đổi trả | Mộc Market{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/policies.css') }}">{% endblock %}
+{% block content %}
+<article class="section policy policy-page">
+  <header class="policy-hero">
+    <p class="eyebrow">THÔNG TIN MINH BẠCH</p>
+    <h1>Chính sách mua hàng và đổi trả</h1>
+    <p class="policy-tagline">Minh bạch trong mua sắm – Tận tâm trong từng sản phẩm.</p>
+    <p>Tại <strong>Mộc Market</strong>, chúng tôi trân trọng giá trị của mỗi sản phẩm gốm thủ công Việt Nam và mong muốn mang đến cho khách hàng trải nghiệm mua sắm thuận tiện, an tâm và đáng tin cậy.</p>
+    <p>Để bảo vệ quyền lợi khách hàng và xây dựng môi trường mua sắm minh bạch, Mộc Market cung cấp các chính sách về đặt hàng, thanh toán, vận chuyển, kiểm tra hàng hóa, đổi trả và bảo mật thông tin như sau.</p>
+  </header>
+
+  <nav class="policy-toc" aria-label="Mục lục chính sách">
+    <h2>Mục lục</h2>
+    <ol>
+      <li><a href="#dat-hang">Chính sách đặt hàng</a></li>
+      <li><a href="#thanh-toan">Chính sách thanh toán</a></li>
+      <li><a href="#van-chuyen">Vận chuyển và giao nhận</a></li>
+      <li><a href="#doi-tra">Đổi trả sản phẩm</a></li>
+      <li><a href="#quy-trinh-doi-tra">Quy trình yêu cầu đổi trả</a></li>
+      <li><a href="#hoan-tien">Chính sách hoàn tiền</a></li>
+      <li><a href="#bao-quan">Hướng dẫn bảo quản sản phẩm gốm</a></li>
+      <li><a href="#bao-mat">Bảo mật thông tin khách hàng</a></li>
+      <li><a href="#khieu-nai">Phản ánh và giải quyết khiếu nại</a></li>
+      <li><a href="#lien-he-hieu-luc">Thông tin liên hệ và hiệu lực</a></li>
+    </ol>
+  </nav>
+
+  <section class="policy-section" id="dat-hang">
+    <span class="policy-section-number">01</span>
+    <div>
+      <h2>Chính sách đặt hàng</h2>
+      <p>Khách hàng có thể lựa chọn sản phẩm, xem thông tin chi tiết, giá bán, hình ảnh và số lượng còn hàng trực tiếp trên website Mộc Market.</p>
+      <p>Khi đặt hàng, khách hàng cần cung cấp đầy đủ và chính xác các thông tin cần thiết để phục vụ quá trình giao nhận, bao gồm họ tên người nhận, số điện thoại và địa chỉ giao hàng.</p>
+      <p>Sau khi đơn hàng được gửi thành công, hệ thống sẽ ghi nhận thông tin và chuyển đơn sang trạng thái <strong>Chờ xác nhận</strong>.</p>
+      <p>Mộc Market có thể liên hệ với khách hàng để làm rõ thông tin đơn hàng trong trường hợp cần thiết. Nếu sản phẩm phát sinh tình trạng hết hàng, sai thông tin hoặc không thể cung cấp, cửa hàng sẽ thông báo và trao đổi phương án xử lý phù hợp với khách hàng.</p>
+      <p>Giá sản phẩm được hiển thị bằng đồng Việt Nam (VNĐ). Phí vận chuyển, nếu có, cần được thông báo rõ ràng trước khi khách xác nhận đặt hàng.</p>
+    </div>
+  </section>
+
+  <section class="policy-section" id="thanh-toan">
+    <span class="policy-section-number">02</span>
+    <div>
+      <h2>Chính sách thanh toán</h2>
+      <p>Mộc Market hiện hỗ trợ phương thức <strong>Thanh toán khi nhận hàng (COD)</strong>.</p>
+      <p>Theo phương thức này, khách hàng thanh toán số tiền của đơn hàng khi nhận sản phẩm từ đơn vị giao hàng hoặc người giao hàng được cửa hàng chỉ định.</p>
+      <p>Tổng giá trị đơn hàng được xác định dựa trên sản phẩm, số lượng, giá bán tại thời điểm đặt hàng và các khoản phí hoặc ưu đãi hợp lệ nếu được áp dụng.</p>
+      <p>Mộc Market khuyến nghị khách hàng kiểm tra thông tin đơn hàng và số tiền cần thanh toán trước khi hoàn tất giao dịch.</p>
+      <p>Website hiện chưa hỗ trợ thanh toán trực tuyến. Các phương thức thanh toán khác chỉ được áp dụng khi Mộc Market có thông báo và xác nhận cụ thể.</p>
+    </div>
+  </section>
+
+  <section class="policy-section" id="van-chuyen">
+    <span class="policy-section-number">03</span>
+    <div>
+      <h2>Chính sách vận chuyển và giao nhận</h2>
+      <p>Do đặc thù sản phẩm gốm có tính dễ vỡ, Mộc Market chú trọng việc đóng gói cẩn thận nhằm hạn chế tác động trong quá trình vận chuyển.</p>
+      <p>Sản phẩm được lựa chọn phương án đóng gói phù hợp với kích thước, trọng lượng và tính chất của từng mặt hàng.</p>
+      <p>Thời gian giao hàng có thể thay đổi tùy theo địa chỉ nhận, điều kiện vận chuyển, số lượng đơn hàng và những tình huống khách quan phát sinh.</p>
+      <p>Khách hàng có trách nhiệm cung cấp địa chỉ và số điện thoại liên hệ chính xác để quá trình giao nhận diễn ra thuận lợi.</p>
+      <p>Khi nhận hàng, khách hàng được khuyến khích kiểm tra tình trạng bên ngoài của kiện hàng và sản phẩm theo điều kiện cho phép của đơn vị vận chuyển.</p>
+      <p>Nếu phát hiện thùng hàng bị móp méo nghiêm trọng, sản phẩm nứt vỡ, giao thiếu hoặc giao sai, khách hàng nên ghi nhận hình ảnh và liên hệ Mộc Market sớm để được hỗ trợ.</p>
+    </div>
+  </section>
+
+  <section class="policy-section" id="doi-tra">
+    <span class="policy-section-number">04</span>
+    <div>
+      <h2>Chính sách đổi trả sản phẩm</h2>
+      <p>Mộc Market mong muốn mỗi sản phẩm đến tay khách hàng đều đúng thông tin mô tả và đáp ứng các tiêu chuẩn chất lượng đã công bố.</p>
+      <p>Trong trường hợp sản phẩm gặp sự cố, cửa hàng sẽ tiếp nhận và xem xét yêu cầu đổi trả một cách minh bạch, công bằng.</p>
+
+      <h3>4.1. Thời hạn yêu cầu đổi trả</h3>
+      <p>Khách hàng có thể gửi yêu cầu đổi trả trong vòng <strong>07 ngày kể từ ngày nhận hàng</strong> theo chính sách đề xuất của Mộc Market.</p>
+      <p>Đối với sản phẩm bị vỡ hoặc hư hỏng khi giao nhận, khách hàng được khuyến khích liên hệ trong vòng 48 giờ sau khi nhận để việc đối chiếu với đơn vị vận chuyển được thuận tiện.</p>
+      <p>Thời gian khuyến nghị thông báo sớm không làm mất các quyền hợp pháp của người tiêu dùng đối với hàng hóa lỗi hoặc không phù hợp với cam kết.</p>
+
+      <h3>4.2. Các trường hợp được hỗ trợ đổi trả</h3>
+      <p>Mộc Market tiếp nhận yêu cầu đổi trả trong những trường hợp sau:</p>
+      <ul>
+        <li>Sản phẩm bị nứt, vỡ hoặc hư hỏng trong quá trình vận chuyển trước khi đến tay khách hàng.</li>
+        <li>Sản phẩm nhận được không đúng mẫu mã, chủng loại hoặc số lượng đã đặt.</li>
+        <li>Sản phẩm có lỗi kỹ thuật hoặc lỗi chất lượng ảnh hưởng đến công năng sử dụng.</li>
+        <li>Sản phẩm có sự khác biệt đáng kể so với những thông tin, đặc điểm đã được công bố trên website.</li>
+        <li>Sản phẩm bị giao nhầm do quá trình chuẩn bị và xử lý đơn hàng của cửa hàng.</li>
+      </ul>
+      <p>Tùy tình trạng thực tế, Mộc Market sẽ trao đổi với khách hàng để lựa chọn hình thức đổi sản phẩm tương đương, thay thế sản phẩm phù hợp hoặc hoàn tiền theo thỏa thuận và quy định pháp luật có liên quan.</p>
+
+      <h3>4.3. Đổi trả khi khách hàng thay đổi nhu cầu</h3>
+      <p>Đối với sản phẩm không có lỗi nhưng khách hàng thay đổi quyết định mua, Mộc Market đề xuất tiếp nhận yêu cầu trong vòng 07 ngày nếu sản phẩm chưa qua sử dụng, còn nguyên vẹn và đáp ứng điều kiện kiểm tra.</p>
+      <p>Sản phẩm cần được giữ đầy đủ các phụ kiện kèm theo và bao bì bảo vệ trong phạm vi có thể.</p>
+      <p>Chi phí vận chuyển phát sinh đối với trường hợp đổi trả do thay đổi nhu cầu sẽ do khách hàng chi trả, trừ khi hai bên có thỏa thuận khác.</p>
+      <p>Với những sản phẩm được đặt làm riêng theo yêu cầu, điều kiện đổi trả sẽ được thông báo và thống nhất trước khi xác nhận đơn hàng. Quy định này không loại trừ trách nhiệm của cửa hàng đối với hàng hóa bị lỗi hoặc không đúng cam kết.</p>
+
+      <h3>4.4. Các trường hợp có thể không được chấp nhận đổi trả tự nguyện</h3>
+      <p>Mộc Market có thể từ chối yêu cầu đổi trả do thay đổi nhu cầu trong các trường hợp:</p>
+      <ul>
+        <li>Sản phẩm đã bị sử dụng, làm hỏng hoặc thay đổi tình trạng ban đầu do lỗi của người mua.</li>
+        <li>Sản phẩm bị nứt, sứt mẻ hoặc hư hại do va đập sau khi khách đã nhận hàng.</li>
+        <li>Sản phẩm không còn đủ điều kiện để kiểm tra hoặc xử lý đổi trả theo chính sách tự nguyện.</li>
+        <li>Sản phẩm được cá nhân hóa theo yêu cầu riêng mà không có lỗi hoặc sai khác so với thỏa thuận.</li>
+      </ul>
+      <p>Đối với gốm thủ công, những khác biệt nhỏ về sắc men, đường nét hoặc họa tiết có thể xuất hiện do đặc tính chế tác. Tuy nhiên, điều này không được dùng để từ chối trách nhiệm nếu sản phẩm không đáp ứng thông tin hoặc chất lượng đã cam kết.</p>
+      <p>Các trường hợp hàng hóa lỗi và quyền lợi bắt buộc của người tiêu dùng vẫn được giải quyết theo quy định pháp luật.</p>
+    </div>
+  </section>
+
+  <section class="policy-section" id="quy-trinh-doi-tra">
+    <span class="policy-section-number">05</span>
+    <div>
+      <h2>Quy trình yêu cầu đổi trả</h2>
+      <p>Để quá trình hỗ trợ được nhanh chóng và thuận tiện, khách hàng có thể thực hiện theo các bước sau:</p>
+      <ol class="policy-steps">
+        <li><strong>Bước 1 — Liên hệ Mộc Market</strong><p>Khách hàng truy cập trang <a href="{{ url_for('contact.contact') }}">Liên hệ</a> trên website và cung cấp mã đơn hàng cùng nội dung cần hỗ trợ.</p></li>
+        <li><strong>Bước 2 — Cung cấp thông tin sản phẩm</strong><p>Khách hàng được khuyến khích gửi hình ảnh hoặc video thể hiện tình trạng sản phẩm, hình ảnh bao bì và mô tả sự cố nếu có.</p></li>
+        <li><strong>Bước 3 — Tiếp nhận và xác minh</strong><p>Mộc Market tiếp nhận thông tin, kiểm tra dữ liệu đơn hàng và trao đổi với khách hàng về tình trạng sản phẩm.</p><p>Cửa hàng hướng tới phản hồi ban đầu trong vòng <strong>02 ngày làm việc</strong> kể từ khi nhận đủ thông tin cần thiết.</p></li>
+        <li><strong>Bước 4 — Thống nhất phương án xử lý</strong><p>Sau khi xác minh, cửa hàng thông báo phương án đổi hàng, nhận lại sản phẩm hoặc hoàn tiền phù hợp.</p><p>Nếu cần gửi hàng trở lại, khách hàng sẽ được hướng dẫn phương thức gửi hàng và cách đóng gói an toàn.</p></li>
+        <li><strong>Bước 5 — Hoàn tất yêu cầu</strong><p>Mộc Market phối hợp với khách hàng để hoàn thành quá trình đổi trả, xác nhận kết quả và cập nhật thông tin liên quan.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="policy-section" id="hoan-tien">
+    <span class="policy-section-number">06</span>
+    <div>
+      <h2>Chính sách hoàn tiền</h2>
+      <p>Trong trường hợp đơn hàng đủ điều kiện hoàn tiền, Mộc Market sẽ trao đổi và xác nhận số tiền cần hoàn với khách hàng.</p>
+      <p>Đối với đơn thanh toán COD, phương thức hoàn tiền có thể được thực hiện thông qua chuyển khoản ngân hàng sau khi xác minh thông tin người nhận hoàn tiền.</p>
+      <p>Thời gian xử lý hoàn tiền dự kiến từ <strong>07–10 ngày làm việc</strong> kể từ khi các điều kiện hoàn tiền đã được xác nhận và thông tin hoàn tiền đầy đủ, trừ trường hợp pháp luật yêu cầu thời hạn khác.</p>
+      <p>Nếu lỗi phát sinh từ Mộc Market hoặc từ quá trình vận chuyển thuộc trách nhiệm của cửa hàng, các chi phí đổi trả hợp lý sẽ do cửa hàng chịu theo thỏa thuận và quy định có liên quan.</p>
+      <p>Khách hàng sẽ được thông báo nếu phát sinh vấn đề làm ảnh hưởng đến tiến độ xử lý.</p>
+    </div>
+  </section>
+
+  <section class="policy-section" id="bao-quan">
+    <span class="policy-section-number">07</span>
+    <div>
+      <h2>Hướng dẫn bảo quản sản phẩm gốm</h2>
+      <p>Để sản phẩm duy trì vẻ đẹp và độ bền trong quá trình sử dụng, Mộc Market khuyến nghị:</p>
+      <ul>
+        <li>Hạn chế làm rơi hoặc va đập sản phẩm vào bề mặt cứng.</li>
+        <li>Vệ sinh nhẹ nhàng bằng khăn mềm và dung dịch phù hợp.</li>
+        <li>Tránh thay đổi nhiệt độ đột ngột nếu sản phẩm không được công bố có khả năng chịu sốc nhiệt.</li>
+        <li>Không sử dụng trong lò vi sóng, lò nướng hoặc máy rửa bát nếu sản phẩm chưa được xác nhận phù hợp.</li>
+        <li>Với gốm trang trí có họa tiết hoặc lớp men đặc biệt, nên bảo quản tại nơi khô ráo và tránh tác động mạnh.</li>
+      </ul>
+      <p>Khách hàng nên tham khảo thông tin sử dụng riêng được cung cấp cho từng sản phẩm.</p>
+    </div>
+  </section>
+
+  <section class="policy-section" id="bao-mat">
+    <span class="policy-section-number">08</span>
+    <div>
+      <h2>Chính sách bảo mật thông tin khách hàng</h2>
+      <p>Mộc Market tôn trọng quyền riêng tư và thông tin cá nhân của khách hàng.</p>
+      <p>Những dữ liệu được cung cấp khi đăng ký tài khoản hoặc đặt hàng có thể bao gồm họ tên, email, số điện thoại, địa chỉ giao hàng và thông tin liên quan đến đơn mua.</p>
+      <p>Thông tin được sử dụng cho những mục đích phù hợp như xử lý đơn hàng, giao nhận, hỗ trợ khách hàng và thực hiện các nghĩa vụ cần thiết liên quan đến giao dịch.</p>
+      <p>Mộc Market không sử dụng thông tin cá nhân cho các mục đích không phù hợp với nội dung đã thông báo và cơ sở xử lý dữ liệu hợp pháp.</p>
+      <p>Việc lưu trữ, bảo vệ, cung cấp hoặc chia sẻ dữ liệu cá nhân phải tuân thủ các quy định pháp luật hiện hành. Trường hợp sử dụng nhà cung cấp dịch vụ vận chuyển, những thông tin cần thiết có thể được cung cấp để thực hiện việc giao hàng.</p>
+      <p>Khách hàng có thể liên hệ Mộc Market để yêu cầu hỗ trợ về thông tin tài khoản và dữ liệu cá nhân theo quy định áp dụng.</p>
+    </div>
+  </section>
+
+  <section class="policy-section" id="khieu-nai">
+    <span class="policy-section-number">09</span>
+    <div>
+      <h2>Tiếp nhận phản ánh và giải quyết khiếu nại</h2>
+      <p>Mộc Market trân trọng mọi góp ý liên quan đến chất lượng sản phẩm, trải nghiệm mua sắm và dịch vụ hỗ trợ.</p>
+      <p>Khi phát sinh phản ánh, khách hàng có thể gửi thông tin qua trang <a href="{{ url_for('contact.contact') }}">Liên hệ</a>, kèm theo mã đơn hàng và nội dung sự việc.</p>
+      <p>Mộc Market sẽ tiếp nhận, đối chiếu thông tin và trao đổi phương án xử lý trên tinh thần thiện chí, minh bạch và tôn trọng quyền lợi hợp pháp của các bên.</p>
+      <p>Nếu không đạt được thỏa thuận, khách hàng vẫn có quyền yêu cầu cơ quan hoặc tổ chức có thẩm quyền hỗ trợ giải quyết theo quy định pháp luật.</p>
+    </div>
+  </section>
+
+  <section class="policy-section" id="lien-he-hieu-luc">
+    <span class="policy-section-number">10</span>
+    <div>
+      <h2>Thông tin liên hệ và hiệu lực chính sách</h2>
+      <p>Mọi yêu cầu hỗ trợ về đặt hàng, giao nhận, đổi trả hoặc phản ánh dịch vụ có thể được gửi qua trang <a href="{{ url_for('contact.contact') }}">Liên hệ Mộc Market</a> trên website.</p>
+      <p>Các thông tin liên hệ chính thức của cửa hàng sẽ được công bố và cập nhật tại khu vực này.</p>
+      <p>Chính sách có hiệu lực kể từ ngày được Mộc Market công bố chính thức. Những thay đổi trong tương lai sẽ được thông báo phù hợp và không làm ảnh hưởng đến quyền lợi đã được xác lập hợp pháp của khách hàng.</p>
+    </div>
+  </section>
+
+  <footer class="policy-signoff">
+    <strong>MỘC MARKET — GỐM &amp; VĂN HÓA VIỆT</strong>
+    <p>Chúng tôi tin rằng sự an tâm của khách hàng là nền tảng cho một trải nghiệm mua sắm bền vững.</p>
+  </footer>
+</article>
+{% endblock %}

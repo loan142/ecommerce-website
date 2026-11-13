@@ -1,0 +1,266 @@
+.admin-body {
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f7f4ed;
+}
+
+.admin-login-body {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.admin-login-panel {
+  width: min(100%, 460px);
+  margin: 0;
+  border-top: 4px solid #c5a77e;
+  background: #fffdf8;
+  box-shadow: 0 18px 50px rgb(45 48 39 / 10%);
+}
+
+.admin-login-brand {
+  display: inline-flex;
+  margin-bottom: 20px;
+  color: #2d3027;
+  text-decoration: none;
+}
+
+.admin-login-panel .eyebrow {
+  color: #8a806e;
+}
+
+.admin-login-panel .button {
+  background: #2d3027;
+}
+
+.admin-login-store-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #686557;
+  font-size: .82rem;
+}
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 28px 18px 20px;
+  background: #2d3027;
+  color: #fbf8f1;
+}
+
+.admin-brand {
+  padding: 0 8px 26px;
+  color: inherit;
+}
+
+.admin-brand .brand-wordmark small {
+  color: #c9c4b8;
+}
+
+.admin-sidebar-nav {
+  display: grid;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.admin-sidebar-nav a,
+.admin-store-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  color: #e8e4da;
+  font-size: .88rem;
+  text-decoration: none;
+}
+
+.admin-sidebar-nav a > span {
+  width: 20px;
+  color: #c5a77e;
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+.admin-sidebar-nav a:hover,
+.admin-sidebar-nav a.is-current {
+  background: #43463b;
+  color: #fff;
+}
+
+.admin-sidebar-nav a.is-current {
+  box-shadow: inset 3px 0 #c5a77e;
+  font-weight: 700;
+}
+
+.admin-store-link {
+  margin-top: auto;
+  border: 1px solid #67695f;
+  color: #f0dfc5;
+}
+
+.admin-store-link:hover {
+  background: #43463b;
+}
+
+.admin-main-column {
+  min-width: 0;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 86px;
+  padding: 14px clamp(20px, 4vw, 52px);
+  border-bottom: 1px solid #e6dfd2;
+  background: #fffdf8;
+}
+
+.admin-topbar > div:first-child {
+  display: grid;
+  line-height: 1.4;
+}
+
+.admin-topbar-kicker {
+  color: #8a806e;
+  font-size: .66rem;
+  letter-spacing: .12em;
+}
+
+.admin-topbar strong {
+  font-size: .93rem;
+}
+
+.admin-account {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-account-name {
+  display: grid;
+  font-size: .84rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.admin-account-name small {
+  color: #777365;
+  font-size: .68rem;
+  font-weight: 400;
+}
+
+.admin-logout {
+  white-space: nowrap;
+}
+
+.admin-content {
+  min-height: calc(100vh - 142px);
+  padding: 34px clamp(20px, 4vw, 52px);
+}
+
+.admin-content > .section {
+  width: 100%;
+  margin: 0;
+}
+
+.admin-content .admin-dashboard {
+  padding-top: 0;
+}
+
+.admin-flashes {
+  padding: 12px clamp(20px, 4vw, 52px) 0;
+}
+
+.admin-footer {
+  padding: 18px clamp(20px, 4vw, 52px);
+  border-top: 1px solid #e6dfd2;
+  color: #777365;
+  font-size: .72rem;
+}
+
+@media (max-width: 760px) {
+  .admin-shell {
+    display: block;
+  }
+
+  .admin-sidebar {
+    position: static;
+    height: auto;
+    padding: 14px 16px 10px;
+  }
+
+  .admin-brand {
+    padding: 0 4px 12px;
+  }
+
+  .admin-sidebar-nav {
+    display: flex;
+    gap: 5px;
+    margin: 6px 0 8px;
+    overflow-x: auto;
+  }
+
+  .admin-sidebar-nav a {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: .78rem;
+  }
+
+  .admin-sidebar-nav a.is-current {
+    box-shadow: inset 0 -3px #c5a77e;
+  }
+
+  .admin-store-link {
+    align-self: flex-start;
+    min-height: 36px;
+    margin-top: 0;
+    padding: 7px 10px;
+    font-size: .76rem;
+  }
+
+  .admin-topbar {
+    min-height: 70px;
+    padding: 12px 16px;
+  }
+
+  .admin-account {
+    gap: 8px;
+  }
+
+  .admin-account-name {
+    max-width: 132px;
+    overflow-wrap: anywhere;
+    font-size: .74rem;
+  }
+
+  .admin-logout {
+    min-height: 36px;
+    padding: 8px 10px;
+    font-size: .72rem;
+  }
+
+  .admin-content {
+    min-height: 0;
+    padding: 25px 16px;
+  }
+
+  .admin-flashes,
+  .admin-footer {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}

@@ -1,16 +1,189 @@
 {% extends "base.html" %}
 {% block title %}{{ product.name }} | E-Commerce{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/product-feedback.css') }}">{% endblock %}
 {% block content %}
 <section class="detail-layout section">
-  <div>{% if product.image_url %}<img class="detail-image" src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<div class="product-placeholder detail-image">ẢNH SẢN PHẨM</div>{% endif %}</div>
-  <div><p class="eyebrow">CHI TIẾT SẢN PHẨM</p><h1>{{ product.name }}</h1>
+  <div class="product-gallery" data-product-gallery>
+    {% if product.primary_image %}
+    <img class="detail-image" data-gallery-main src="{{ image_source(product.primary_image.image_path) }}" alt="{{ product.name }}">
+    {% elif product.image_url %}
+    <img class="detail-image" data-gallery-main src="{{ image_source(product.image_url) }}" alt="{{ product.name }}">
+    {% else %}
+    <div class="product-placeholder detail-image">ẢNH SẢN PHẨM</div>
+    {% endif %}
+    {% if product.images %}
+    <div class="product-gallery-thumbnails" aria-label="Ảnh sản phẩm">
+      {% for image in product.images %}
+      <button class="product-gallery-thumbnail{% if image.id == product.primary_image.id %} is-selected{% endif %}" type="button" data-gallery-thumbnail data-image-src="{{ image_source(image.image_path) }}" data-image-alt="{{ product.name }} - ảnh {{ loop.index }}" aria-label="Xem ảnh {{ loop.index }}" {% if image.id == product.primary_image.id %}aria-current="true"{% endif %}>
+        <img src="{{ image_source(image.image_path) }}" alt="" loading="lazy">
+      </button>
+      {% endfor %}
+    </div>
+    {% elif product.image_url %}
+    <div class="product-gallery-thumbnails" aria-label="Ảnh sản phẩm">
+      <button class="product-gallery-thumbnail is-selected" type="button" data-gallery-thumbnail data-image-src="{{ image_source(product.image_url) }}" data-image-alt="{{ product.name }}" aria-label="Xem ảnh 1" aria-current="true">
+        <img src="{{ image_source(product.image_url) }}" alt="" loading="lazy">
+      </button>
+    </div>
+    {% endif %}
+  </div>
+  <div><p class="eyebrow">CHI TIẾT SẢN PHẨM</p><p class="product-category-label">{{ product.category.name if product.category else "Danh mục đang cập nhật" }}</p><h1>{{ product.name }}</h1>
     <p class="price detail-price">{{ "{:,.0f}".format(product.price) }}₫ {% if product.old_price %}<del>{{ "{:,.0f}".format(product.old_price) }}₫</del>{% endif %}</p>
     <p>{{ product.description or "Thông tin sản phẩm sẽ được cập nhật." }}</p>
     <p>Còn lại: {{ product.stock }}</p>
     <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" class="add-cart-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <label>Số lượng <input type="number" name="quantity" value="1" min="1" max="{{ product.stock if product.stock > 0 else 1 }}"></label>
       <button class="button" type="submit" {% if product.stock < 1 %}disabled{% endif %}>Thêm vào giỏ</button>
     </form>
   </div>
+</section>
+<section class="section product-feedback" id="product-reviews">
+  <div class="feedback-heading">
+    <div>
+      <p class="eyebrow">CHIA SẺ TRẢI NGHIỆM</p>
+      <h2>Đánh giá sản phẩm</h2>
+    </div>
+    <div class="rating-summary">
+      <strong>{{ "%.1f"|format(average_rating or 0) }}</strong>
+      <span class="rating-summary-stars" aria-label="Điểm trung bình {{ "%.1f"|format(average_rating or 0) }} trên 5 sao">
+        {% for star in range(1, 6) %}<span aria-hidden="true">{{ "★" if average_rating and star <= (average_rating|round(0, "floor")|int) else "☆" }}</span>{% endfor %}
+      </span>
+      <small>{{ review_count }} đánh giá đã duyệt</small>
+    </div>
+  </div>
+
+  <div class="rating-distribution" aria-label="Phân bố số sao">
+    {% for star in range(5, 0, -1) %}
+    <div class="rating-distribution-row">
+      <span>{{ star }} sao</span>
+      <span class="rating-distribution-track"><span style="width: {{ ((review_stats.get(star, 0) / review_count * 100) if review_count else 0)|round(1) }}%"></span></span>
+      <span>{{ review_stats.get(star, 0) }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if current_user and current_user.role == "customer" %}
+    {% if can_review %}
+    <form class="feedback-form" method="post" action="{{ url_for('products.submit_review', product_id=product.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <h3>{% if own_review %}Cập nhật đánh giá của bạn{% else %}Gửi đánh giá{% endif %}</h3>
+      {% if own_review and own_review.status == "approved" %}<p class="feedback-note">Khi cập nhật, đánh giá sẽ tạm ẩn và cần Admin duyệt lại.</p>{% endif %}
+      <fieldset class="rating-choice">
+        <legend>Chọn số sao</legend>
+        {% for star in range(1, 6) %}
+        <input id="review-rating-{{ star }}" class="rating-choice-input" type="radio" name="rating" value="{{ star }}" {% if own_review and own_review.rating == star %}checked{% elif not own_review and star == 5 %}checked{% endif %} required>
+        <label for="review-rating-{{ star }}" aria-label="{{ star }} sao" title="{{ star }} sao">★</label>
+        {% endfor %}
+      </fieldset>
+      <label class="feedback-label" for="review-comment">Nội dung đánh giá</label>
+      <textarea id="review-comment" name="comment" rows="4" maxlength="2000" required placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm...">{{ own_review.comment if own_review else "" }}</textarea>
+      <button class="button" type="submit">{% if own_review %}Cập nhật đánh giá{% else %}Gửi đánh giá{% endif %}</button>
+      <small>Chỉ khách có đơn hàng hoàn thành chứa sản phẩm này mới được đánh giá. Đánh giá sẽ hiển thị sau khi được duyệt.</small>
+    </form>
+    {% else %}
+    <p class="feedback-note">{% if own_review %}Đánh giá hiện tại chưa được xác minh đơn hàng hoàn thành nên chưa thể cập nhật tại đây.{% else %}Bạn cần có đơn hàng hoàn thành chứa sản phẩm này để gửi đánh giá sao.{% endif %}</p>
+    {% endif %}
+  {% elif current_user %}
+    <p class="feedback-note">Tài khoản quản trị không thể gửi đánh giá khách hàng.</p>
+  {% else %}
+    <p class="feedback-note"><a href="{{ url_for('auth.login') }}">Đăng nhập</a> và mua sản phẩm để gửi đánh giá sao sau khi đơn hàng hoàn thành.</p>
+  {% endif %}
+
+  {% if reviews %}
+  <div class="feedback-card-list">
+    {% for review, reviewer_name in reviews %}
+    <article class="feedback-card">
+      <header class="feedback-card-header">
+        <div><strong>{{ reviewer_name or "Khách hàng" }}</strong><span class="feedback-stars" aria-label="{{ review.rating }} trên 5 sao">{% for star in range(1, 6) %}<span aria-hidden="true">{{ "★" if star <= review.rating else "☆" }}</span>{% endfor %}</span></div>
+        <time datetime="{{ review.created_at.isoformat() if review.created_at else '' }}">{{ review.created_at.strftime("%d/%m/%Y") if review.created_at else "Ngày gửi chưa được lưu" }}</time>
+      </header>
+      <p class="feedback-badges"><span class="feedback-badge">Đã duyệt</span>{% if review.purchase_verified %}<span class="feedback-badge is-verified">Đã mua hàng</span>{% endif %}</p>
+      <p class="feedback-content">{{ review.comment }}</p>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="feedback-empty">Chưa có đánh giá được duyệt cho sản phẩm này.</p>
+  {% endif %}
+
+  {% if review_pages > 1 %}
+  <nav class="feedback-pagination" aria-label="Phân trang đánh giá">
+    {% if review_page > 1 %}<a href="{{ url_for('products.product_detail', product_id=product.id, review_page=review_page - 1, comment_page=comment_page) }}">Đánh giá trước</a>{% endif %}
+    <span>Trang {{ review_page }} / {{ review_pages }}</span>
+    {% if review_page < review_pages %}<a href="{{ url_for('products.product_detail', product_id=product.id, review_page=review_page + 1, comment_page=comment_page) }}">Đánh giá tiếp</a>{% endif %}
+  </nav>
+  {% endif %}
+</section>
+
+<section class="section product-feedback product-discussion" id="product-comments">
+  <div class="feedback-heading">
+    <div><p class="eyebrow">TRAO ĐỔI CÙNG MỘC MARKET</p><h2>Bình luận &amp; Hỏi đáp</h2></div>
+  </div>
+  {% if current_user and current_user.role == "customer" %}
+  <form class="feedback-form" method="post" action="{{ url_for('products.submit_product_comment', product_id=product.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <h3>Gửi bình luận hoặc câu hỏi</h3>
+    <label class="feedback-label" for="comment-kind">Loại nội dung</label>
+    <select id="comment-kind" name="kind" required><option value="comment">Bình luận</option><option value="question">Câu hỏi</option></select>
+    <label class="feedback-label" for="product-comment">Nội dung</label>
+    <textarea id="product-comment" name="content" rows="4" maxlength="2000" required placeholder="Nhập bình luận hoặc câu hỏi của bạn..."></textarea>
+    <button class="button" type="submit">Gửi nội dung</button>
+    <small>Nội dung chỉ hiển thị công khai sau khi được Admin duyệt. Tối đa 2.000 ký tự.</small>
+  </form>
+  {% elif current_user %}
+  <p class="feedback-note">Tài khoản quản trị có thể trả lời trong trang quản trị.</p>
+  {% else %}
+  <p class="feedback-note"><a href="{{ url_for('auth.login') }}">Đăng nhập</a> để gửi bình luận hoặc câu hỏi.</p>
+  {% endif %}
+
+  {% if comments %}
+  <div class="feedback-card-list">
+    {% for comment, commenter_name in comments %}
+    <article class="feedback-card">
+      <header class="feedback-card-header">
+        <div><strong>{{ commenter_name }}</strong><span class="feedback-badge">{{ "Câu hỏi" if comment.kind == "question" else "Bình luận" }}</span></div>
+        <time datetime="{{ comment.created_at.isoformat() }}">{{ comment.created_at.strftime("%d/%m/%Y") }}</time>
+      </header>
+      {% if current_user and current_user.id == comment.user_id and comment.status != "approved" %}
+      <p class="feedback-badges"><span class="feedback-badge is-{{ comment.status }}">{{ {"pending": "Chờ duyệt", "hidden": "Đã ẩn"}.get(comment.status, comment.status) }}</span></p>
+      {% endif %}
+      <p class="feedback-content">{{ comment.content }}</p>
+      {% if comment.admin_reply %}
+      <div class="admin-reply"><strong>Quản trị viên Mộc Market</strong><p>{{ comment.admin_reply }}</p>{% if comment.replied_at %}<time datetime="{{ comment.replied_at.isoformat() }}">{{ comment.replied_at.strftime("%d/%m/%Y") }}</time>{% endif %}</div>
+      {% endif %}
+      {% if current_user and current_user.id == comment.user_id %}
+      <details class="own-comment-actions">
+        <summary>Chỉnh sửa nội dung</summary>
+        <form class="feedback-form compact-feedback-form" method="post" action="{{ url_for('products.edit_product_comment', comment_id=comment.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <label class="feedback-label" for="edit-kind-{{ comment.id }}">Loại nội dung</label>
+          <select id="edit-kind-{{ comment.id }}" name="kind"><option value="comment" {% if comment.kind == "comment" %}selected{% endif %}>Bình luận</option><option value="question" {% if comment.kind == "question" %}selected{% endif %}>Câu hỏi</option></select>
+          <label class="feedback-label" for="edit-comment-{{ comment.id }}">Nội dung</label>
+          <textarea id="edit-comment-{{ comment.id }}" name="content" rows="3" maxlength="2000" required>{{ comment.content }}</textarea>
+          <button class="button secondary" type="submit">Lưu và gửi duyệt lại</button>
+        </form>
+        {% if comment.status != "hidden" %}
+        <form method="post" action="{{ url_for('products.hide_own_product_comment', comment_id=comment.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="text-button" type="submit">Yêu cầu ẩn nội dung</button>
+        </form>
+        {% endif %}
+      </details>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="feedback-empty">Chưa có bình luận hoặc câu hỏi được duyệt.</p>
+  {% endif %}
+
+  {% if comment_pages > 1 %}
+  <nav class="feedback-pagination" aria-label="Phân trang bình luận">
+    {% if comment_page > 1 %}<a href="{{ url_for('products.product_detail', product_id=product.id, review_page=review_page, comment_page=comment_page - 1) }}">Bình luận trước</a>{% endif %}
+    <span>Trang {{ comment_page }} / {{ comment_pages }}</span>
+    {% if comment_page < comment_pages %}<a href="{{ url_for('products.product_detail', product_id=product.id, review_page=review_page, comment_page=comment_page + 1) }}">Bình luận tiếp</a>{% endif %}
+  </nav>
+  {% endif %}
 </section>
 {% endblock %}

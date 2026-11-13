@@ -1,0 +1,62 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}{{ page_title }} | Mộc Market{% endblock %}
+{% set active_section = "products" %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-products.css') }}">{% endblock %}
+{% block content %}
+<section class="section admin-products admin-product-form-page">
+  <p class="eyebrow">QUẢN TRỊ / SẢN PHẨM</p>
+  <h1>{{ page_title }}</h1>
+  {% if errors %}<div class="admin-form-errors" role="alert"><p>Vui lòng kiểm tra lại thông tin:</p><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul></div>{% endif %}
+  <form class="admin-product-form" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Tên sản phẩm <span aria-hidden="true">*</span><input name="name" maxlength="150" value="{{ product_values.name }}" required></label>
+    <label>Mô tả<textarea name="description" rows="5">{{ product_values.description }}</textarea></label>
+    <label>Danh mục chính <span aria-hidden="true">*</span>
+      <select name="category_id" required>
+        <option value="">Chọn danh mục</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}" {% if product_values.category_id == category.id|string %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <div class="admin-product-form-grid">
+      <label>Giá bán (VND) <span aria-hidden="true">*</span><input type="number" name="price" min="0" step="1" value="{{ product_values.price }}" required></label>
+      <label>Giá cũ (VND)<input type="number" name="old_price" min="0" step="1" value="{{ product_values.old_price }}"></label>
+      <label>Số lượng tồn kho <span aria-hidden="true">*</span><input type="number" name="stock" min="0" step="1" value="{{ product_values.stock }}" required></label>
+    </div>
+    <label>Ảnh dự phòng cũ (không bắt buộc)<input name="image_url" maxlength="500" value="{{ product_values.image_url }}" placeholder="URL HTTPS hoặc ảnh có sẵn trong /static/images/"></label>
+    <section class="admin-product-gallery" aria-labelledby="product-gallery-title" data-existing-count="{{ product_images|length }}">
+      <div>
+        <h2 id="product-gallery-title">Ảnh sản phẩm</h2>
+        <p class="muted">Tối đa 5 ảnh, mỗi ảnh không quá 5 MB. Chọn JPG, PNG hoặc WebP.</p>
+      </div>
+      <label class="button secondary admin-image-picker" for="product-image-files">Chọn ảnh từ máy tính</label>
+      <input id="product-image-files" class="admin-image-file-input" type="file" name="images" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple>
+      <p class="admin-image-count" id="product-image-count" aria-live="polite">Đã có {{ product_images|length }} ảnh</p>
+      {% if product_images %}
+      <h3>Ảnh hiện có</h3>
+      <div id="existing-product-images" class="admin-gallery-grid">
+        {% for image in product_images %}
+        <article class="admin-gallery-card">
+          <img src="{{ image_source(image.image_path) }}" alt="Ảnh {{ loop.index }} của sản phẩm">
+          <label class="admin-primary-choice"><input type="radio" name="primary_image" value="{{ image.id }}" {% if image.is_primary %}checked{% endif %}> Ảnh chính</label>
+          <label>Thứ tự
+            <select name="image_order_{{ image.id }}" aria-label="Thứ tự ảnh {{ loop.index }}">
+              {% for order in range(1, 6) %}
+              <option value="{{ order }}" {% if image.sort_order + 1 == order %}selected{% endif %}>{{ order }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label class="admin-image-delete"><input type="checkbox" name="delete_image_ids" value="{{ image.id }}"> Xóa ảnh này</label>
+        </article>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div id="new-product-image-previews" class="admin-gallery-grid" aria-live="polite"></div>
+    </section>
+    <label class="admin-active-checkbox"><input type="checkbox" name="is_active" value="1" {% if product_values.is_active %}checked{% endif %}> Hiển thị sản phẩm cho khách hàng</label>
+    <div class="admin-product-form-actions"><button class="button" type="submit">Lưu sản phẩm</button><a class="button secondary" href="{{ url_for('admin.products') }}">Hủy</a></div>
+  </form>
+  <p class="admin-back-link"><a href="{{ url_for('admin.products') }}">← Quay lại danh sách</a></p>
+</section>
+{% endblock %}

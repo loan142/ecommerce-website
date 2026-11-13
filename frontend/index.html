@@ -48,7 +48,7 @@
     {% for product in products %}
     <article class="product-card">
       <a class="product-image-link" href="{{ url_for('products.product_detail', product_id=product.id) }}">
-        {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">{% else %}<div class="product-placeholder"><span>GỐM THỦ CÔNG</span><small>Ảnh sản phẩm sắp được cập nhật</small></div>{% endif %}
+        {% if product.primary_image %}<img src="{{ image_source(product.primary_image.image_path) }}" alt="{{ product.name }}" loading="lazy">{% elif product.image_url %}<img src="{{ image_source(product.image_url) }}" alt="{{ product.name }}" loading="lazy">{% else %}<div class="product-placeholder"><span>GỐM THỦ CÔNG</span><small>Ảnh sản phẩm sắp được cập nhật</small></div>{% endif %}
         <span class="product-quick-view">Xem chi tiết ↗</span>
       </a>
       <div class="product-info"><p class="product-kicker">MỘC MARKET · GỐM VIỆT</p><h3><a href="{{ url_for('products.product_detail', product_id=product.id) }}">{{ product.name }}</a></h3>

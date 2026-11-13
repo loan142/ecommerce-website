@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Đơn hàng #{{ order.id }} | Mộc Market{% endblock %}
+{% block content %}
+<section class="section customer-order-detail-page">
+  <a class="customer-order-back" href="{{ url_for('customer_orders.my_orders') }}">← Quay lại đơn hàng của tôi</a>
+  <div class="customer-order-detail-heading">
+    <div>
+      <p class="eyebrow">CHI TIẾT ĐƠN HÀNG</p>
+      <h1>Đơn hàng #{{ order.id }}</h1>
+      <p class="customer-order-date">{% if order.created_at %}Đặt ngày {{ order.created_at.strftime("%d/%m/%Y lúc %H:%M") }}{% else %}Đơn hàng cũ chưa lưu thời gian đặt.{% endif %}</p>
+    </div>
+    <span class="customer-order-status customer-order-status--{{ order.status }}">{{ status_labels.get(order.status, order.status) }}</span>
+  </div>
+  {% if order.status == "pending" %}
+  <form class="customer-order-cancel-detail" method="post" action="{{ url_for('customer_orders.cancel_my_order', order_id=order.id) }}" data-confirm="Bạn có chắc muốn hủy đơn hàng #{{ order.id }}? Tồn kho sẽ được hoàn lại.">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <span>Đơn hàng đang chờ xác nhận. Bạn có thể hủy nếu đổi ý.</span>
+    <button class="customer-order-cancel-button" type="submit">Hủy đơn hàng</button>
+  </form>
+  {% endif %}
+
+  <div class="customer-order-detail-layout">
+    <div class="customer-order-main">
+      <section class="customer-order-panel" aria-labelledby="ordered-items-title">
+        <h2 id="ordered-items-title">Sản phẩm đã đặt</h2>
+        {% if order_items %}
+        <div class="customer-ordered-items">
+          {% for row in order_items %}
+          <article class="customer-ordered-item">
+            {% if row.image %}
+            <img class="customer-ordered-image" src="{{ image_source(row.image.image_path) }}" alt="" loading="lazy">
+            {% elif row.product and row.product.image_url %}
+            <img class="customer-ordered-image" src="{{ image_source(row.product.image_url) }}" alt="" loading="lazy">
+            {% else %}
+            <div class="customer-ordered-image customer-ordered-image-placeholder" aria-hidden="true">GỐM</div>
+            {% endif %}
+            <div class="customer-ordered-product">
+              <h3>{% if row.product %}{{ row.product.name }}{% else %}Sản phẩm không còn trong hệ thống (#{{ row.item.product_id }}){% endif %}</h3>
+              <p>{{ row.item.quantity }} sản phẩm × {{ "{:,.0f}".format(row.item.unit_price) }}₫</p>
+            </div>
+            <strong class="customer-ordered-line-total">{{ "{:,.0f}".format(row.line_total) }}₫</strong>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="muted">Đơn hàng cũ này không có thông tin chi tiết sản phẩm.</p>
+        {% endif %}
+        <div class="customer-order-grand-total"><span>Tổng thanh toán</span><strong>{{ "{:,.0f}".format(order.total_amount) }}₫</strong></div>
+      </section>
+    </div>
+
+    <aside class="customer-order-aside">
+      <section class="customer-order-panel" aria-labelledby="shipping-title">
+        <h2 id="shipping-title">Thông tin giao hàng</h2>
+        <dl class="customer-shipping-details">
+          <div><dt>Người nhận</dt><dd>{% if order.recipient_name %}{{ order.recipient_name }}{% else %}<span class="muted">Chưa lưu thông tin người nhận.</span>{% endif %}</dd></div>
+          <div><dt>Số điện thoại</dt><dd>{% if order.recipient_phone %}<a href="tel:{{ order.recipient_phone }}">{{ order.recipient_phone }}</a>{% else %}<span class="muted">Chưa lưu số điện thoại.</span>{% endif %}</dd></div>
+          <div><dt>Địa chỉ</dt><dd>{% if order.shipping_address %}{{ order.shipping_address }}{% else %}<span class="muted">Chưa lưu địa chỉ giao hàng.</span>{% endif %}</dd></div>
+          <div><dt>Ghi chú</dt><dd>{% if order.note %}{{ order.note }}{% else %}<span class="muted">Không có ghi chú.</span>{% endif %}</dd></div>
+          <div><dt>Thanh toán</dt><dd>{% if order.payment_method == "cod" %}Thanh toán khi nhận hàng (COD){% elif order.payment_method %}{{ order.payment_method }}{% else %}<span class="muted">Đơn hàng cũ chưa lưu phương thức.</span>{% endif %}</dd></div>
+        </dl>
+      </section>
+      <p class="customer-order-readonly-note">Trạng thái và thông tin đơn hàng được cập nhật bởi Mộc Market.</p>
+    </aside>
+  </div>
+</section>
+{% endblock %}

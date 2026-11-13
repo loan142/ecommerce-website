@@ -1,22 +1,47 @@
 {% extends "base.html" %}
-{% block title %}Sản phẩm | E-Commerce{% endblock %}
+{% block title %}Sản phẩm | Mộc Market{% endblock %}
 {% block content %}
 <section class="section">
-  <p class="eyebrow">CỬA HÀNG</p><h1>Tất cả sản phẩm</h1>
-  <form class="filter-bar" method="get">
-    <input name="q" type="search" value="{{ keyword }}" placeholder="Tìm sản phẩm...">
-    <select name="sort" aria-label="Sắp xếp">
-      <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Mới nhất</option>
-      <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Giá tăng dần</option>
-      <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Giá giảm dần</option>
-    </select><button class="button">Tìm / Sắp xếp</button>
+  <p class="eyebrow">CỬA HÀNG · GỐM THỦ CÔNG</p>
+  <h1>Tất cả sản phẩm</h1>
+  <form class="filter-bar catalog-filters" method="get" action="{{ url_for('products.list_products') }}">
+    <label for="catalog-search">Tìm sản phẩm
+      <input id="catalog-search" name="q" type="search" value="{{ keyword }}" placeholder="Tên hoặc mô tả sản phẩm">
+    </label>
+    <label for="catalog-category">Danh mục
+      <select id="catalog-category" name="category">
+        <option value="">Tất cả danh mục</option>
+        {% for category in categories %}
+        <option value="{{ category.slug }}" {% if selected_category == category.slug %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label for="catalog-sort">Sắp xếp
+      <select id="catalog-sort" name="sort">
+        <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Mới nhất</option>
+        <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Giá tăng dần</option>
+        <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Giá giảm dần</option>
+      </select>
+    </label>
+    <div class="catalog-filter-actions">
+      <button class="button" type="submit">Áp dụng bộ lọc</button>
+      {% if keyword or selected_category or sort != 'newest' %}<a class="button secondary" href="{{ url_for('products.list_products') }}">Đặt lại</a>{% endif %}
+    </div>
   </form>
-  {% if products %}<div class="product-grid">
+  {% if products %}
+  <p class="catalog-results-count">Tìm thấy {{ products|length }} sản phẩm</p>
+  <div class="product-grid">
   {% for product in products %}<article class="product-card">
     <a href="{{ url_for('products.product_detail', product_id=product.id) }}">
-    {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<div class="product-placeholder">ẢNH SẢN PHẨM</div>{% endif %}</a>
-    <div class="product-info"><h3><a href="{{ url_for('products.product_detail', product_id=product.id) }}">{{ product.name }}</a></h3><p class="price">{{ "{:,.0f}".format(product.price) }}₫</p></div>
+    {% if product.primary_image %}<img src="{{ image_source(product.primary_image.image_path) }}" alt="{{ product.name }}">{% elif product.image_url %}<img src="{{ image_source(product.image_url) }}" alt="{{ product.name }}">{% else %}<div class="product-placeholder">ẢNH SẢN PHẨM</div>{% endif %}</a>
+    <div class="product-info">
+      <p class="product-category-label">{{ product.category.name if product.category else "Danh mục đang cập nhật" }}</p>
+      <h3><a href="{{ url_for('products.product_detail', product_id=product.id) }}">{{ product.name }}</a></h3>
+      <p class="price">{{ "{:,.0f}".format(product.price) }}₫</p>
+    </div>
   </article>{% endfor %}</div>
-  {% else %}<div class="empty-state"><h3>Không tìm thấy sản phẩm</h3><p>Thử từ khóa khác nhé.</p></div>{% endif %}
+  {% else %}
+  <div class="empty-state"><h3>Không tìm thấy sản phẩm phù hợp</h3><p>Hãy thử từ khóa khác hoặc chọn danh mục khác.</p><a class="button" href="{{ url_for('products.list_products') }}">Xem tất cả sản phẩm</a></div>
+  {% endif %}
 </section>
 {% endblock %}

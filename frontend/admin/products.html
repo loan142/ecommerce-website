@@ -1,3 +1,65 @@
-{% extends "base.html" %}
-{% block title %}Quản lý sản phẩm | E-Commerce{% endblock %}
-{% block content %}<section class="section"><p class="eyebrow">ADMIN / PRODUCTS</p><h1>Quản lý sản phẩm</h1><p>Đây là giao diện nền. Nhóm sẽ bổ sung danh sách, thêm, sửa và ẩn sản phẩm.</p><a class="button" href="{{ url_for('admin.dashboard') }}">Quay lại dashboard</a></section>{% endblock %}
+{% extends "admin/base_admin.html" %}
+{% block title %}Quản lý sản phẩm | Mộc Market{% endblock %}
+{% set active_section = "products" %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-products.css') }}">{% endblock %}
+{% block content %}
+<section class="section admin-products">
+  <div class="admin-page-heading">
+    <div><p class="eyebrow">QUẢN TRỊ / SẢN PHẨM</p><h1>Quản lý sản phẩm</h1><p class="muted">Tìm kiếm, cập nhật thông tin và trạng thái hiển thị sản phẩm.</p></div>
+    <a class="button" href="{{ url_for('admin.create_product') }}">+ Thêm sản phẩm</a>
+  </div>
+  <nav class="admin-product-views" aria-label="Lọc trạng thái sản phẩm">
+    <a class="{% if selected_view == 'all' %}is-current{% endif %}" href="{{ url_for('admin.products', view='all') }}" {% if selected_view == 'all' %}aria-current="page"{% endif %}>Tất cả sản phẩm</a>
+    <a class="{% if selected_view == 'active' %}is-current{% endif %}" href="{{ url_for('admin.products', view='active') }}" {% if selected_view == 'active' %}aria-current="page"{% endif %}>Đang hiển thị</a>
+    <a class="{% if selected_view == 'hidden' %}is-current{% endif %}" href="{{ url_for('admin.products', view='hidden') }}" {% if selected_view == 'hidden' %}aria-current="page"{% endif %}>Đã ẩn</a>
+    <a class="{% if selected_view == 'trash' %}is-current{% endif %}" href="{{ url_for('admin.products', view='trash') }}" {% if selected_view == 'trash' %}aria-current="page"{% endif %}>Thùng rác</a>
+  </nav>
+  <form class="admin-product-search" method="get" action="{{ url_for('admin.products') }}">
+    <input type="hidden" name="view" value="{{ selected_view }}">
+    <label for="product-search">Tìm theo tên sản phẩm</label>
+    <div class="admin-product-filter-controls">
+      <input id="product-search" name="q" type="search" value="{{ keyword }}" placeholder="Nhập tên sản phẩm">
+      <label for="admin-category-filter">Danh mục
+        <select id="admin-category-filter" name="category">
+          <option value="">Tất cả danh mục</option>
+          <option value="uncategorized" {% if selected_category == 'uncategorized' %}selected{% endif %}>Chưa phân loại</option>
+          {% for category in categories %}
+          <option value="{{ category.id }}" {% if selected_category == category.id|string %}selected{% endif %}>{{ category.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="button secondary" type="submit">Lọc sản phẩm</button>
+      {% if keyword or selected_category %}<a class="text-button" href="{{ url_for('admin.products', view=selected_view) }}">Đặt lại</a>{% endif %}
+    </div>
+  </form>
+  {% if products %}
+  <div class="admin-product-table-wrap">
+    <table class="admin-product-table">
+      <thead><tr><th>Mã</th><th>Ảnh</th><th>Sản phẩm</th><th>Danh mục</th><th>Giá bán</th><th>Giá cũ</th><th>Tồn kho</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+      <tbody>{% for product in products %}
+      <tr>
+        <td>#{{ product.id }}</td>
+        <td class="admin-product-image-cell">{% if product.primary_image %}<img src="{{ image_source(product.primary_image.image_path) }}" alt="{{ product.name }}" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="product-placeholder" hidden>Chưa có ảnh</span>{% elif product.image_url %}<img src="{{ image_source(product.image_url) }}" alt="{{ product.name }}" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="product-placeholder" hidden>Chưa có ảnh</span>{% else %}<span class="product-placeholder">Chưa có ảnh</span>{% endif %}</td>
+        <td class="admin-product-name">{{ product.name }}</td>
+        <td>{% if product.category %}{{ product.category.name }}{% else %}<span class="admin-unclassified-label">Chưa phân loại</span>{% endif %}</td>
+        <td>{{ "{:,.0f}".format(product.price) }}₫</td>
+        <td>{% if product.old_price is not none %}{{ "{:,.0f}".format(product.old_price) }}₫{% else %}<span class="muted">—</span>{% endif %}</td>
+        <td>{{ product.stock }}</td>
+        <td>{% if product.deleted_at %}<span class="admin-status is-deleted">Đã xóa · {{ product.deleted_at.strftime("%d/%m/%Y %H:%M") }}</span>{% else %}<span class="admin-status {% if product.is_active %}is-active{% else %}is-hidden{% endif %}">{{ "Đang hiển thị" if product.is_active else "Đã ẩn" }}</span>{% endif %}</td>
+        <td><div class="admin-product-actions">
+          {% if selected_view == 'trash' %}
+          <form method="post" action="{{ url_for('admin.restore_product', product_id=product.id) }}" onsubmit="return confirm('Khôi phục sản phẩm này?')"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button secondary" type="submit">Khôi phục</button></form>
+          {% else %}
+          <a class="button secondary" href="{{ url_for('admin.edit_product', product_id=product.id) }}">Sửa</a>
+          <form method="post" action="{{ url_for('admin.toggle_product', product_id=product.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button {% if product.is_active %}danger{% else %}secondary{% endif %}" type="submit">{{ "Ẩn" if product.is_active else "Hiện" }}</button></form>
+          <form method="post" action="{{ url_for('admin.delete_product', product_id=product.id) }}" onsubmit="return confirm('Chuyển sản phẩm này vào thùng rác? Lịch sử đơn hàng và ảnh sẽ được giữ nguyên.')"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button danger" type="submit">Xóa</button></form>
+          {% endif %}
+        </div></td>
+      </tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty-state"><h2>{% if keyword or selected_category %}Không tìm thấy sản phẩm{% elif selected_view == 'trash' %}Thùng rác đang trống{% else %}Chưa có sản phẩm nào{% endif %}</h2><p>{% if keyword or selected_category %}Thử từ khóa hoặc danh mục khác.{% elif selected_view == 'trash' %}Sản phẩm chuyển vào thùng rác sẽ xuất hiện tại đây.{% else %}Hãy thêm sản phẩm đầu tiên vào cửa hàng.{% endif %}</p>{% if selected_view != 'trash' and not keyword and not selected_category %}<a class="button" href="{{ url_for('admin.create_product') }}">Thêm sản phẩm</a>{% endif %}</div>
+  {% endif %}
+</section>
+{% endblock %}

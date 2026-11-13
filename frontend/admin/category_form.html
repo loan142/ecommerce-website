@@ -1,0 +1,18 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Sửa danh mục | Mộc Market{% endblock %}
+{% set active_section = "categories" %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-products.css') }}">{% endblock %}
+{% block content %}
+<section class="section admin-products admin-product-form-page">
+  <p class="eyebrow">QUẢN TRỊ / DANH MỤC</p>
+  <h1>Sửa danh mục</h1>
+  {% if errors %}<div class="admin-form-errors" role="alert"><p>Vui lòng kiểm tra lại thông tin:</p><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul></div>{% endif %}
+  <form class="admin-product-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Tên danh mục <span aria-hidden="true">*</span><input name="name" maxlength="100" value="{{ category_values.name }}" required></label>
+    <p class="muted">Mã định danh hiện tại: <code>{{ category.slug }}</code>. Mã sẽ được tạo lại từ tên mới.</p>
+    <p class="admin-category-warning">Không có thao tác xóa danh mục. Khi đổi tên, các sản phẩm đang liên kết vẫn giữ nguyên danh mục.</p>
+    <div class="admin-product-form-actions"><button class="button" type="submit">Lưu danh mục</button><a class="button secondary" href="{{ url_for('admin.categories') }}">Hủy</a></div>
+  </form>
+</section>
+{% endblock %}

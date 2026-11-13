@@ -1,0 +1,33 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Quản lý danh mục | Mộc Market{% endblock %}
+{% set active_section = "categories" %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-products.css') }}">{% endblock %}
+{% block content %}
+<section class="section admin-products">
+  <div class="admin-page-heading">
+    <div><p class="eyebrow">QUẢN TRỊ / DANH MỤC</p><h1>Quản lý danh mục</h1><p class="muted">Danh mục giúp khách dễ tìm sản phẩm; sản phẩm cũ chưa phân loại được giữ nguyên cho tới khi bạn chọn.</p></div>
+  </div>
+  {% if errors %}<div class="admin-form-errors" role="alert"><p>Vui lòng kiểm tra lại:</p><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul></div>{% endif %}
+  <form class="admin-category-create" method="post" action="{{ url_for('admin.create_category') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="category-name">Thêm danh mục mới</label>
+    <div><input id="category-name" name="name" maxlength="100" value="{{ category_values.name }}" placeholder="Ví dụ: Gốm nghệ thuật" required><button class="button" type="submit">Thêm danh mục</button></div>
+  </form>
+  {% if categories %}
+  <div class="admin-product-table-wrap">
+    <table class="admin-product-table">
+      <thead><tr><th>Danh mục</th><th>Mã định danh</th><th>Số sản phẩm</th><th>Thao tác</th></tr></thead>
+      <tbody>{% for category in categories %}
+      <tr>
+        <td>{{ category.name }}</td>
+        <td><code>{{ category.slug }}</code></td>
+        <td>{{ category.products|length }}</td>
+        <td><a class="button secondary" href="{{ url_for('admin.edit_category', category_id=category.id) }}">Sửa</a></td>
+      </tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-empty-state"><h2>Chưa có danh mục</h2><p>Thêm danh mục đầu tiên bằng biểu mẫu phía trên.</p></div>
+  {% endif %}
+</section>
+{% endblock %}

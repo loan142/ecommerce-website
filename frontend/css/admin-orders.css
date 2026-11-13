@@ -1,0 +1,353 @@
+.admin-orders {
+  width: var(--page);
+  margin: 0 auto;
+}
+
+.admin-page-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.admin-page-heading h1 {
+  margin: 8px 0;
+  font-family: var(--serif);
+  font-weight: 500;
+}
+
+.admin-section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 26px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-section-nav a {
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.admin-section-nav a:hover,
+.admin-section-nav a.is-current {
+  border-color: var(--line);
+  background: #fffdf8;
+  color: var(--clay);
+}
+
+.admin-section-nav a.is-current {
+  font-weight: 700;
+}
+
+.admin-order-filter,
+.admin-order-update {
+  display: grid;
+  gap: 9px;
+  margin: 0 0 24px;
+}
+
+.admin-order-filter > div,
+.admin-order-update > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-order-filter select,
+.admin-order-status-form select,
+.admin-order-update select {
+  min-width: 180px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+
+.admin-order-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.admin-order-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-order-table th,
+.admin-order-table td {
+  padding: 13px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.admin-order-table th {
+  background: #f7f3ed;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 600;
+}
+
+.admin-order-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-order-table td > small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.order-status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #f2e9df;
+  color: #705841;
+  font-size: .78rem;
+}
+
+.order-status-confirmed,
+.order-status-completed {
+  background: #e8f3e8;
+  color: #32613a;
+}
+
+.order-status-shipping {
+  background: #e8eef5;
+  color: #365b7a;
+}
+
+.order-status-cancelled {
+  background: #f8ece8;
+  color: #8c4236;
+}
+
+.admin-order-actions,
+.admin-order-status-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-order-actions {
+  flex-wrap: wrap;
+}
+
+.admin-order-status-form {
+  margin: 0;
+}
+
+.admin-order-status-form select {
+  min-width: 138px;
+  padding: 8px 10px;
+  font-size: .82rem;
+}
+
+.admin-order-status-form .button {
+  min-height: 36px;
+  padding: 8px 12px;
+  font-size: .82rem;
+}
+
+.admin-order-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0 0 28px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.admin-order-summary > div {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.admin-shipping-details {
+  margin: 0 0 28px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.admin-shipping-details h2 {
+  margin: 0 0 18px;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+.admin-shipping-details dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+  margin: 0;
+}
+
+.admin-shipping-details dl > div {
+  min-width: 0;
+}
+
+.admin-shipping-details dt {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.admin-shipping-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.admin-shipping-details dd a {
+  text-decoration: underline;
+  text-decoration-color: var(--ochre);
+  text-underline-offset: 3px;
+}
+
+.admin-shipping-details .admin-shipping-address {
+  grid-column: 1 / -1;
+}
+
+.admin-order-label {
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+.admin-order-update {
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.admin-order-update p {
+  margin: 0;
+}
+
+.admin-order-terminal {
+  margin: 0 0 32px;
+  padding: 14px 18px;
+  background: #f7f3ed;
+  color: var(--muted);
+}
+
+.admin-order-items-heading {
+  margin: 0 0 14px;
+}
+
+.admin-order-total {
+  margin-top: 16px;
+  text-align: right;
+}
+
+.admin-order-total strong {
+  margin-left: 8px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 700px) {
+  .site-header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-header .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .site-header .header-actions {
+    grid-column: 1;
+    grid-row: 2;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px 14px;
+    width: 100%;
+  }
+
+  .site-header .header-actions .search {
+    flex: 1 1 160px;
+    width: auto;
+    min-width: 150px;
+  }
+
+  .site-header .header-actions .search input {
+    min-width: 80px;
+  }
+
+  .site-header .main-nav {
+    grid-column: 1;
+    grid-row: 3;
+    flex-wrap: wrap;
+    min-width: 0;
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px 12px;
+    font-size: .75rem;
+    overflow-x: visible;
+    white-space: normal;
+  }
+
+  .admin-page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-page-heading .button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .admin-order-filter > div,
+  .admin-order-update > div {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-order-filter select,
+  .admin-order-update select {
+    width: 100%;
+  }
+
+  .admin-order-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-shipping-details {
+    padding: 17px;
+  }
+
+  .admin-shipping-details dl {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .admin-shipping-details .admin-shipping-address {
+    grid-column: auto;
+  }
+}

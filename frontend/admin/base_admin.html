@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4ecdf">
+  <title>{% block title %}Quản trị | Mộc Market{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-layout.css') }}">
+  {% block head_extra %}{% endblock %}
+  <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="brand admin-brand" href="{{ url_for('admin.dashboard') }}" aria-label="Mộc Market - Dashboard">
+        <span class="brand-mark" aria-hidden="true">m</span>
+        <span class="brand-wordmark"><strong>MỘC</strong><small>QUẢN TRỊ CỬA HÀNG</small></span>
+      </a>
+      <nav class="admin-sidebar-nav" aria-label="Điều hướng quản trị">
+        <a class="{% if active_section == 'dashboard' %}is-current{% endif %}" {% if active_section == 'dashboard' %}aria-current="page"{% endif %} href="{{ url_for('admin.dashboard') }}"><span aria-hidden="true">⌂</span>Dashboard</a>
+        <a class="{% if active_section == 'products' %}is-current{% endif %}" {% if active_section == 'products' %}aria-current="page"{% endif %} href="{{ url_for('admin.products') }}"><span aria-hidden="true">▧</span>Sản phẩm</a>
+        <a class="{% if active_section == 'categories' %}is-current{% endif %}" {% if active_section == 'categories' %}aria-current="page"{% endif %} href="{{ url_for('admin.categories') }}"><span aria-hidden="true">▦</span>Danh mục</a>
+        <a class="{% if active_section == 'orders' %}is-current{% endif %}" {% if active_section == 'orders' %}aria-current="page"{% endif %} href="{{ url_for('admin.orders') }}"><span aria-hidden="true">▤</span>Đơn hàng</a>
+        <a class="{% if active_section == 'reviews' %}is-current{% endif %}" {% if active_section == 'reviews' %}aria-current="page"{% endif %} href="{{ url_for('admin.reviews') }}"><span aria-hidden="true">☆</span>Đánh giá &amp; Bình luận</a>
+      </nav>
+      <a class="admin-store-link" href="{{ url_for('main.index') }}" target="_blank" rel="noopener noreferrer">↗ Xem cửa hàng</a>
+    </aside>
+    <div class="admin-main-column">
+      <header class="admin-topbar">
+        <div>
+          <span class="admin-topbar-kicker">MỘC MARKET</span>
+          <strong>Khu vực quản trị</strong>
+        </div>
+        <div class="admin-account">
+          <span class="admin-account-name">{{ logged_in_user.full_name if logged_in_user else "Quản trị viên" }}<small>Quản trị viên</small></span>
+          <a class="button secondary admin-logout" href="{{ url_for('admin.logout') }}">Đăng xuất</a>
+        </div>
+      </header>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}<div class="flash-wrap admin-flashes">{% for message in messages %}<p class="flash">{{ message }}</p>{% endfor %}</div>{% endif %}
+      {% endwith %}
+      <main class="admin-content">{% block content %}{% endblock %}</main>
+      <footer class="admin-footer">© 2026 Mộc Market · Quản trị cửa hàng</footer>
+    </div>
+  </div>
+</body>
+</html>

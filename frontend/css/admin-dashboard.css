@@ -1,0 +1,364 @@
+.admin-dashboard {
+  width: var(--page);
+  margin: 0 auto;
+  padding-top: 58px;
+}
+
+.admin-dashboard .admin-page-heading {
+  margin-bottom: 22px;
+}
+
+.admin-dashboard .admin-page-heading h1,
+.admin-dashboard-panel h2 {
+  margin: 6px 0;
+  font-family: var(--serif);
+  font-weight: 500;
+}
+
+.admin-section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 26px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-section-nav a {
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.admin-section-nav a:hover,
+.admin-section-nav a.is-current {
+  border-color: var(--line);
+  background: #fffdf8;
+  color: var(--clay);
+}
+
+.admin-section-nav a.is-current {
+  font-weight: 700;
+}
+
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.admin-stat-card {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 19px 20px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fffdf8;
+}
+
+.admin-stat-card > span {
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.admin-stat-card > strong {
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font: 600 1.8rem/1.2 var(--serif);
+}
+
+.admin-stat-card > small {
+  color: var(--muted);
+  font-size: .7rem;
+}
+
+.admin-stat-warning {
+  border-top: 3px solid var(--ochre);
+}
+
+.admin-stat-danger {
+  border-top: 3px solid #a34a3b;
+}
+
+.admin-stat-success {
+  border-top: 3px solid var(--moss);
+}
+
+.admin-stat-revenue {
+  background: #f0eee3;
+}
+
+.admin-stat-revenue > strong {
+  color: var(--moss);
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+}
+
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.admin-dashboard-panel {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fffdf8;
+}
+
+.admin-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.admin-panel-heading .eyebrow {
+  margin-bottom: 4px;
+}
+
+.admin-panel-heading h2 {
+  font-size: 1.35rem;
+}
+
+.admin-panel-heading .text-link {
+  flex: 0 0 auto;
+  margin-top: 9px;
+  font-size: .7rem;
+}
+
+.admin-status-chart {
+  display: grid;
+  gap: 15px;
+  padding: 6px 0;
+}
+
+.admin-chart-row {
+  display: grid;
+  grid-template-columns: 90px minmax(40px, 1fr) 25px;
+  align-items: center;
+  gap: 10px;
+  font-size: .75rem;
+}
+
+.admin-chart-row > strong {
+  text-align: right;
+}
+
+.admin-chart-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #f1ece2;
+}
+
+.admin-chart-bar {
+  display: block;
+  min-width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--clay);
+}
+
+.admin-chart-confirmed {
+  background: #9c8057;
+}
+
+.admin-chart-shipping {
+  background: #6d8492;
+}
+
+.admin-chart-completed {
+  background: var(--moss);
+}
+
+.admin-chart-cancelled {
+  background: #a34a3b;
+}
+
+.admin-chart-empty {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-height: 150px;
+  align-content: center;
+  padding: 22px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.admin-chart-empty strong {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.1rem;
+}
+
+.admin-chart-empty span {
+  font-size: .78rem;
+}
+
+.admin-stock-alerts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-stock-alerts li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-stock-alerts li:first-child {
+  padding-top: 0;
+}
+
+.admin-stock-alerts li:last-child {
+  border-bottom: 0;
+}
+
+.admin-stock-alert-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: .8rem;
+}
+
+.admin-stock-alert-name small {
+  display: block;
+  color: var(--muted);
+  font-size: .68rem;
+}
+
+.admin-stock-badge {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border-radius: 99px;
+  font-size: .68rem;
+}
+
+.admin-stock-badge.is-out {
+  background: #f8ece8;
+  color: #8c4236;
+}
+
+.admin-stock-badge.is-low {
+  background: #f4eddd;
+  color: #705841;
+}
+
+.admin-recent-orders {
+  margin-bottom: 10px;
+}
+
+.admin-recent-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-recent-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-recent-table th,
+.admin-recent-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.admin-recent-table th {
+  background: #f7f3ed;
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 600;
+}
+
+.admin-recent-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-recent-table .button {
+  min-height: 34px;
+  padding: 7px 11px;
+  font-size: .7rem;
+}
+
+.admin-dashboard .order-status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #f2e9df;
+  color: #705841;
+  font-size: .72rem;
+}
+
+.admin-dashboard .order-status-confirmed,
+.admin-dashboard .order-status-completed {
+  background: #e8f3e8;
+  color: #32613a;
+}
+
+.admin-dashboard .order-status-shipping {
+  background: #e8eef5;
+  color: #365b7a;
+}
+
+.admin-dashboard .order-status-cancelled {
+  background: #f8ece8;
+  color: #8c4236;
+}
+
+@media (max-width: 900px) {
+  .admin-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-dashboard {
+    padding-top: 38px;
+  }
+
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard-panel {
+    padding: 17px;
+  }
+
+  .admin-panel-heading {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .admin-panel-heading .text-link {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 460px) {
+  .admin-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-chart-row {
+    grid-template-columns: 78px minmax(20px, 1fr) 22px;
+    gap: 7px;
+    font-size: .68rem;
+  }
+}

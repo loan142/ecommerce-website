@@ -1,13 +1,82 @@
 {% extends "base.html" %}
-{% block title %}Thanh toán | E-Commerce{% endblock %}
+{% block title %}{% if order is defined %}Đặt hàng thành công{% else %}Thanh toán | Mộc Market{% endif %}{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">{% endblock %}
 {% block content %}
-<section class="auth-panel"><p class="eyebrow">HOÀN TẤT ĐƠN HÀNG</p><h1>Thông tin đặt hàng</h1>
-<form method="post" class="auth-form">
-<label>Họ tên<input name="full_name" required maxlength="120"></label>
-<label>Số điện thoại<input name="phone" required maxlength="30"></label>
-<label>Địa chỉ giao hàng<textarea name="address" required rows="3"></textarea></label>
-<label>Phương thức thanh toán<select name="payment_method"><option value="cod">Thanh toán khi nhận hàng (COD)</option></select></label>
-<button class="button" type="submit">Xác nhận đặt hàng</button>
-</form><p class="muted">Thanh toán trực tuyến chưa được tích hợp trong bộ khung.</p>
+<section class="section checkout-page">
+  {% if order is defined %}
+  <div class="checkout-confirmation">
+    <span class="checkout-confirmation-mark" aria-hidden="true">✓</span>
+    <p class="eyebrow">MỘC MARKET / ĐẶT HÀNG</p>
+    <h1>Đã nhận đơn hàng của bạn</h1>
+    <p>Mã đơn hàng <strong>#{{ order.id }}</strong></p>
+    <p>Tổng tiền: <strong>{{ "{:,.0f}".format(order.total_amount) }}₫</strong></p>
+    <p class="muted">Đơn hàng đang chờ xác nhận. COD là thanh toán khi nhận hàng; website chưa xử lý thanh toán trực tuyến.</p>
+    <a class="button" href="{{ url_for('main.index') }}">Tiếp tục mua sắm</a>
+  </div>
+  {% else %}
+  <div class="checkout-heading">
+    <p class="eyebrow">HOÀN TẤT ĐƠN HÀNG</p>
+    <h1>Thông tin giao hàng</h1>
+    <p class="muted">Vui lòng kiểm tra sản phẩm và nhập chính xác thông tin người nhận.</p>
+  </div>
+
+  {% if errors %}
+  <div class="checkout-errors" role="alert" aria-live="polite">
+    <strong>Chưa thể đặt hàng:</strong>
+    <ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+
+  <form method="post" class="checkout-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="checkout_token" value="{{ checkout_token }}">
+    <div class="checkout-layout">
+      <div class="checkout-fields">
+        <section class="checkout-card">
+          <h2>Người nhận</h2>
+          <label for="recipient-name">Họ tên người nhận <span aria-hidden="true">*</span></label>
+          <input id="recipient-name" name="recipient_name" type="text" required maxlength="120" autocomplete="name" value="{{ values.recipient_name }}" placeholder="Ví dụ: Nguyễn Minh An">
+
+          <label for="recipient-phone">Số điện thoại <span aria-hidden="true">*</span></label>
+          <input id="recipient-phone" name="recipient_phone" type="tel" required maxlength="30" autocomplete="tel" inputmode="tel" value="{{ values.recipient_phone }}" placeholder="Ví dụ: 090 123 4567">
+
+          <label for="shipping-address">Địa chỉ giao hàng <span aria-hidden="true">*</span></label>
+          <textarea id="shipping-address" name="shipping_address" required maxlength="500" rows="4" autocomplete="street-address" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố">{{ values.shipping_address }}</textarea>
+
+          <label for="order-note">Ghi chú <span class="checkout-optional">(không bắt buộc)</span></label>
+          <textarea id="order-note" name="note" maxlength="1000" rows="3" placeholder="Lưu ý khi giao hàng (nếu có)">{{ values.note }}</textarea>
+        </section>
+      </div>
+
+      <aside class="checkout-card checkout-summary" aria-labelledby="checkout-summary-title">
+        <h2 id="checkout-summary-title">Đơn hàng của bạn</h2>
+        {% if items %}
+        <div class="checkout-items-wrap">
+          <table class="checkout-items">
+            <thead><tr><th>Sản phẩm</th><th>SL</th><th>Thành tiền</th></tr></thead>
+            <tbody>{% for item in items %}
+            <tr>
+              <td><span>{{ item.product.name }}</span><small>{{ "{:,.0f}".format(item.product.price) }}₫ / sản phẩm</small></td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ "{:,.0f}".format(item.product.price * item.quantity) }}₫</td>
+            </tr>{% endfor %}</tbody>
+          </table>
+        </div>
+        <div class="checkout-total"><span>Tổng cộng</span><strong>{{ "{:,.0f}".format(total) }}₫</strong></div>
+        {% else %}
+        <p class="checkout-no-items">Giỏ hàng chưa có sản phẩm hợp lệ.</p>
+        {% endif %}
+
+        <label for="payment-method">Phương thức thanh toán</label>
+        <select id="payment-method" name="payment_method" required>
+          <option value="cod" {% if values.payment_method == "cod" %}selected{% endif %}>Thanh toán khi nhận hàng (COD)</option>
+        </select>
+        <p class="checkout-cod-note">COD chỉ là phương thức thanh toán khi nhận hàng. Không có giao dịch trực tuyến được thực hiện trên website.</p>
+        <button class="button checkout-submit" type="submit" {% if not items %}disabled{% endif %}>Đặt hàng</button>
+        <a class="checkout-back-link" href="{{ url_for('cart.view_cart') }}">← Quay lại giỏ hàng</a>
+      </aside>
+    </div>
+  </form>
+  {% endif %}
 </section>
 {% endblock %}

@@ -1,0 +1,76 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Đánh giá & Bình luận | Mộc Market{% endblock %}
+{% set active_section = "reviews" %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-reviews.css') }}">{% endblock %}
+{% block content %}
+<section class="section admin-review-page">
+  <div class="admin-page-heading">
+    <div><p class="eyebrow">QUẢN TRỊ / NỘI DUNG KHÁCH HÀNG</p><h1>Đánh giá &amp; Bình luận</h1><p class="muted">Duyệt đánh giá sao, câu hỏi và bình luận sản phẩm.</p></div>
+  </div>
+
+  <nav class="admin-review-filters" aria-label="Lọc nội dung">
+    {% for status, label in [("", "Tất cả"), ("pending", "Chờ duyệt"), ("approved", "Đã duyệt"), ("hidden", "Đã ẩn")] %}
+    <a class="{% if selected_status == status %}is-current{% endif %}" {% if selected_status == status %}aria-current="page"{% endif %} href="{{ url_for('admin.reviews', status=status) }}">{{ label }}</a>
+    {% endfor %}
+  </nav>
+
+  {% if entries %}
+  <div class="admin-review-table-wrap">
+    <table class="admin-review-table">
+      <thead><tr><th>Sản phẩm</th><th>Người gửi</th><th>Loại</th><th>Nội dung</th><th>Ngày gửi</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+      <tbody>
+      {% for entry in entries %}
+      <tr>
+        <td><a href="{{ url_for('products.product_detail', product_id=entry.product_id) }}">{{ entry.product_name }}</a></td>
+        <td>{{ entry.sender_name or "Tài khoản không còn tồn tại" }}</td>
+        <td>{% if entry.content_type == "review" %}Đánh giá{% elif entry.kind == "question" %}Câu hỏi{% else %}Bình luận{% endif %}</td>
+        <td class="admin-review-content">
+          {% if entry.rating %}<span class="admin-review-stars" aria-label="{{ entry.rating }} sao">{% for star in range(1, 6) %}{{ "★" if star <= entry.rating else "☆" }}{% endfor %}</span>{% endif %}
+          <p>{{ entry.content }}</p>
+          {% if entry.admin_reply %}<div class="admin-review-existing-reply"><strong>Đã trả lời:</strong> {{ entry.admin_reply }}</div>{% endif %}
+        </td>
+        <td>{{ entry.created_at.strftime("%d/%m/%Y %H:%M") if entry.created_at else "Chưa lưu" }}</td>
+        <td><span class="admin-review-status is-{{ entry.status }}">{{ {"pending": "Chờ duyệt", "approved": "Đã duyệt", "hidden": "Đã ẩn"}.get(entry.status, entry.status) }}</span></td>
+        <td class="admin-review-actions">
+          {% if entry.status != "approved" %}
+          <form method="post" action="{{ url_for('admin.moderate_review_content', content_type=entry.content_type, content_id=entry.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="status" value="approved">
+            <button class="button secondary" type="submit">Duyệt</button>
+          </form>
+          {% endif %}
+          {% if entry.status != "hidden" %}
+          <form method="post" action="{{ url_for('admin.moderate_review_content', content_type=entry.content_type, content_id=entry.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="status" value="hidden">
+            <button class="button danger" type="submit">Ẩn</button>
+          </form>
+          {% endif %}
+          {% if entry.content_type == "comment" %}
+          <details class="admin-review-reply">
+            <summary>{% if entry.admin_reply %}Sửa trả lời{% else %}Trả lời{% endif %}</summary>
+            <form method="post" action="{{ url_for('admin.reply_to_product_comment', comment_id=entry.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <label class="sr-only" for="admin-reply-{{ entry.id }}">Trả lời bình luận #{{ entry.id }}</label>
+              <textarea id="admin-reply-{{ entry.id }}" name="reply" rows="3" maxlength="2000" required>{{ entry.admin_reply or "" }}</textarea>
+              <button class="button" type="submit">Lưu trả lời</button>
+            </form>
+          </details>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="admin-review-empty"><h2>Chưa có nội dung</h2><p>{% if selected_status %}Không có nội dung ở trạng thái này.{% else %}Đánh giá và bình luận mới sẽ xuất hiện tại đây.{% endif %}</p></div>
+  {% endif %}
+
+  {% if pages > 1 %}
+  <nav class="admin-review-pagination" aria-label="Phân trang nội dung">
+    {% if page > 1 %}<a href="{{ url_for('admin.reviews', status=selected_status, page=page - 1) }}">Trước</a>{% endif %}
+    <span>Trang {{ page }} / {{ pages }} · {{ total }} nội dung</span>
+    {% if page < pages %}<a href="{{ url_for('admin.reviews', status=selected_status, page=page + 1) }}">Tiếp</a>{% endif %}
+  </nav>
+  {% endif %}
+</section>
+{% endblock %}

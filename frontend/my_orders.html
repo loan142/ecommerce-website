@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Đơn hàng của tôi | Mộc Market{% endblock %}
+{% block content %}
+<section class="section customer-orders-page">
+  <div class="customer-orders-heading">
+    <div>
+      <p class="eyebrow">TÀI KHOẢN CỦA BẠN</p>
+      <h1>Đơn hàng của tôi</h1>
+      <p class="customer-orders-intro">Theo dõi tình trạng và xem lại thông tin các đơn hàng bạn đã đặt.</p>
+    </div>
+    <a class="button secondary" href="{{ url_for('products.list_products') }}">Tiếp tục mua sắm</a>
+  </div>
+
+  <form class="customer-order-filter" method="get" action="{{ url_for('customer_orders.my_orders') }}">
+    <label for="customer-order-status">Lọc theo trạng thái</label>
+    <select id="customer-order-status" name="status">
+      <option value="" {% if not selected_status %}selected{% endif %}>Tất cả đơn hàng</option>
+      {% for status, label in status_labels.items() %}
+      <option value="{{ status }}" {% if selected_status == status %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button class="button" type="submit">Lọc đơn hàng</button>
+    {% if selected_status %}<a class="customer-order-reset" href="{{ url_for('customer_orders.my_orders') }}">Xóa bộ lọc</a>{% endif %}
+  </form>
+
+  {% if orders %}
+  <div class="customer-order-list">
+    {% for order, item_count in orders %}
+    <article class="customer-order-card">
+      <div class="customer-order-card-heading">
+        <div>
+          <span class="customer-order-label">Mã đơn</span>
+          <h2>#{{ order.id }}</h2>
+        </div>
+        <span class="customer-order-status customer-order-status--{{ order.status }}">{{ status_labels.get(order.status, order.status) }}</span>
+      </div>
+      <dl class="customer-order-summary">
+        <div>
+          <dt>Ngày đặt</dt>
+          <dd>{% if order.created_at %}{{ order.created_at.strftime("%d/%m/%Y %H:%M") }}{% else %}<span class="muted">Chưa lưu thời gian</span>{% endif %}</dd>
+        </div>
+        <div><dt>Số sản phẩm</dt><dd>{{ item_count }}</dd></div>
+        <div><dt>Tổng thanh toán</dt><dd class="customer-order-total">{{ "{:,.0f}".format(order.total_amount) }}₫</dd></div>
+      </dl>
+      <div class="customer-order-actions">
+        <a class="button secondary customer-order-detail-link" href="{{ url_for('customer_orders.my_order_detail', order_id=order.id) }}">Xem chi tiết</a>
+        {% if order.status == "pending" %}
+        <form method="post" action="{{ url_for('customer_orders.cancel_my_order', order_id=order.id) }}" data-confirm="Bạn có chắc muốn hủy đơn hàng #{{ order.id }}? Tồn kho sẽ được hoàn lại.">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="customer-order-cancel-button" type="submit">Hủy đơn hàng</button>
+        </form>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="customer-orders-empty">
+    <span class="customer-orders-empty-mark" aria-hidden="true">m</span>
+    <h2>{% if selected_status %}Không có đơn hàng ở trạng thái này{% else %}Bạn chưa có đơn hàng nào{% endif %}</h2>
+    <p>{% if selected_status %}Hãy thử trạng thái khác hoặc xem tất cả đơn hàng.{% else %}Các đơn bạn đặt khi đăng nhập sẽ xuất hiện tại đây.{% endif %}</p>
+    {% if selected_status %}
+    <a class="button secondary" href="{{ url_for('customer_orders.my_orders') }}">Xem tất cả đơn hàng</a>
+    {% else %}
+    <a class="button" href="{{ url_for('products.list_products') }}">Khám phá sản phẩm</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
